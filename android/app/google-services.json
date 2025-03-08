@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "654730206928",
+    "project_id": "sahel-alik",
+    "storage_bucket": "sahel-alik.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654730206928:android:483d1b00156e6960f248d5",
+        "android_client_info": {
+          "package_name": "com.example.sahel_alik"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdOTPUkOE20jgv73QKGn0lHWj1rv57J30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
