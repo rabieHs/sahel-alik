@@ -8,6 +8,7 @@ import 'package:sahel_alik/views/interfaces/register_interface.dart';
 import 'package:sahel_alik/views/interfaces/searcher/searcher_home_interface.dart';
 
 import 'views/interfaces/provider/provider_home_interface.dart';
+import 'views/interfaces/provider/service_details_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

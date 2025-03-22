@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:image_picker/image_picker.dart';
 
-Future<String?> saveImageToCloudinary(File? imageFile) async {
+Future<String?> uploadImageToCloudinary(File? imageFile) async {
   if (imageFile == null) {
     return null;
   }
@@ -37,4 +38,10 @@ Future<String?> saveImageToCloudinary(File? imageFile) async {
 
     return null;
   }
+}
+
+Future<XFile?> getImageFromGallery() async {
+  final ImagePicker picker = ImagePicker();
+  final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  return pickedFile;
 }

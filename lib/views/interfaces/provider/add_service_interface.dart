@@ -108,7 +108,7 @@ class _AddServiceInterfaceState extends State<AddServiceInterface> {
 
     String? imageUrl;
     if (_image != null) {
-      imageUrl = await saveImageToCloudinary(_image);
+      imageUrl = await uploadImageToCloudinary(_image);
       if (imageUrl == null) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('Failed to upload image. Please try again.')));

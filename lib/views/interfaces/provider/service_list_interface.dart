@@ -12,7 +12,8 @@ class ServiceListInterface extends StatefulWidget {
 
 class _ServiceListInterfaceState extends State<ServiceListInterface> {
   final TextEditingController _searchController = TextEditingController();
-  List<ServiceModel> _services = []; // Use ServiceModel instead of String
+  List<ServiceModel> _services = [];
+  List<ServiceModel> _filteredServices = []; // Added filtered services list
   bool _isLoading = true;
 
   @override
@@ -30,8 +31,26 @@ class _ServiceListInterfaceState extends State<ServiceListInterface> {
         await serviceService.getServicesForProvider();
     setState(() {
       _services = fetchedServices;
-      _isLoading = false;
+      _filteredServices = fetchedServices; // Initially show all services
     });
+  }
+
+  void _filterServices(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        _filteredServices = _services; // Show all services when query is empty
+      });
+    } else {
+      setState(() {
+        _filteredServices = _services
+            .where((service) =>
+                service.title!.toLowerCase().contains(query.toLowerCase()) ||
+                service.description!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+            .toList();
+      });
+    }
   }
 
   @override
@@ -51,19 +70,18 @@ class _ServiceListInterfaceState extends State<ServiceListInterface> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
+              onChanged: _filterServices, // Call _filterServices on text change
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemCount: _services.length,
-                      itemBuilder: (context, index) {
-                        return ServiceCard(
-                          service: _services[index],
-                        );
-                      },
-                    ),
+              child: ListView.builder(
+                itemCount: _filteredServices.length, // Use _filteredServices
+                itemBuilder: (context, index) {
+                  return ServiceCard(
+                    service: _filteredServices[index], // Use _filteredServices
+                  );
+                },
+              ),
             ),
           ],
         ),
