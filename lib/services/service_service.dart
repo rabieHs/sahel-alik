@@ -8,6 +8,59 @@ class ServiceService {
       FirebaseFirestore.instance.collection('services');
   final GeoFlutterFire _geo = GeoFlutterFire();
 
+  // Get services by category and location
+  Stream<List<ServiceModel>> getServicesByCategoryAndLocation({
+    required String category,
+    required double latitude,
+    required double longitude,
+    required double radius,
+  }) {
+    GeoFirePoint center = _geo.point(latitude: latitude, longitude: longitude);
+
+    return _geo
+        .collection(
+            collectionRef:
+                _serviceCollection.where('category', isEqualTo: category))
+        .within(
+          center: center,
+          radius: radius,
+          field: 'location',
+          strictMode: true,
+        )
+        .map((List<DocumentSnapshot<Object?>> documentList) {
+      return documentList.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return ServiceModel.fromJson(data);
+      }).toList();
+    });
+  }
+
+  // Get nearest services regardless of category
+  Stream<List<ServiceModel>> getNearestServices({
+    required double latitude,
+    required double longitude,
+    required double radius,
+  }) {
+    GeoFirePoint center = _geo.point(latitude: latitude, longitude: longitude);
+
+    return _geo
+        .collection(collectionRef: _serviceCollection)
+        .within(
+          center: center,
+          radius: radius,
+          field: 'location',
+          strictMode: true,
+        )
+        .map((List<DocumentSnapshot<Object?>> documentList) {
+      return documentList.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return ServiceModel.fromJson(data);
+      }).toList();
+    });
+  }
+
   // Add a new service
   Future<ServiceModel?> addService(ServiceModel service) async {
     try {

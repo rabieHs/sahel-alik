@@ -11,11 +11,14 @@ class ServiceModel {
   String? phone;
   String? email;
   double? rating;
+  List<double>? ratingList; // Add ratingList field
   String? userId;
+  String? category; // Add category field
 
   ServiceModel({
     this.id,
     this.title,
+    this.category, // Include category in constructor
     this.description,
     this.imageUrl,
     this.location,
@@ -23,6 +26,7 @@ class ServiceModel {
     this.phone,
     this.email,
     this.rating = 0.0,
+    this.ratingList, // Include ratingList in constructor
     this.userId,
   });
 
@@ -54,7 +58,11 @@ class ServiceModel {
       phone: json['phone'],
       email: json['email'],
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      ratingList: (json['ratingList'] as List<dynamic>?)
+          ?.map((e) => (e as num).toDouble())
+          .toList(), // Parse ratingList from json
       userId: json['userId'],
+      category: json['category'],
     );
   }
 
@@ -67,7 +75,9 @@ class ServiceModel {
       'phone': phone,
       'email': email,
       'rating': rating,
+      'ratingList': ratingList, // Include ratingList in toJson
       'userId': userId,
+      'category': category,
     };
 
     // If id is not null and not empty, include it

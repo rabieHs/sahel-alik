@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../services/auth_service.dart'; // Import AuthService
-import '../../models/user.dart'; // Import UserModel
-import '../widgets/custom_button.dart'; // Import CustomButton
+import '../../services/auth_service.dart';
+import '../../models/user.dart';
+import '../widgets/custom_button.dart';
+import 'google_register_interface.dart'; // Import GoogleRegisterInterface
 
 class LoginInterface extends StatefulWidget {
+  static const routeName = '/login'; // Define routeName
   final VoidCallback showRegisterPage;
-  const LoginInterface({super.key, required this.showRegisterPage});
+  const LoginInterface({Key? key, required this.showRegisterPage})
+      : super(key: key);
 
   @override
-  State<LoginInterface> createState() => _LoginInterfaceState();
+  _LoginInterfaceState createState() => _LoginInterfaceState();
 }
 
 class _LoginInterfaceState extends State<LoginInterface> {
@@ -26,12 +29,10 @@ class _LoginInterfaceState extends State<LoginInterface> {
           children: [
             TextFormField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
-                border: const OutlineInputBorder(
-                  // Use const here
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(12)), // More explicit BorderRadius
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
               ),
               keyboardType: TextInputType.emailAddress,
@@ -39,12 +40,10 @@ class _LoginInterfaceState extends State<LoginInterface> {
             const SizedBox(height: 20),
             TextFormField(
               controller: _passwordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
-                border: const OutlineInputBorder(
-                  // Use const here
-                  borderRadius: BorderRadius.all(
-                      Radius.circular(12)), // More explicit BorderRadius
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
               ),
               obscureText: true,
@@ -52,56 +51,102 @@ class _LoginInterfaceState extends State<LoginInterface> {
             const SizedBox(height: 30),
             CustomButton(
               onPressed: () async {
-                // Implement Login functionality
-                String email = _emailController.text;
-                String password = _passwordController.text;
-
+                // Email/password login
+                String email = _emailController.text.trim();
+                String password = _passwordController.text.trim();
                 if (email.isNotEmpty && password.isNotEmpty) {
                   AuthService authService = AuthService();
                   UserModel? user = await authService
                       .signInWithEmailAndPassword(email, password);
                   if (user != null) {
-                    // Navigate to home page based on user type
-                    if (user.type == 'provider') {
-                      Navigator.pushReplacementNamed(context, '/providerHome');
-                    } else {
-                      Navigator.pushReplacementNamed(context, '/searcherHome');
-                    }
+                    _navigateToHome(context, user);
                   } else {
-                    // Show error message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Login failed. Please try again.'),
-                      ),
-                    );
+                    _showSnackBar(context,
+                        'Login failed. Please check your credentials.');
                   }
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in all fields.'),
-                    ),
-                  );
+                  _showSnackBar(context, 'Please enter email and password');
                 }
               },
               text: 'Odkhol',
+            ),
+            const SizedBox(height: 20),
+            CustomButton(
+              onPressed: () async {
+                // Google Sign-in
+                AuthService authService = AuthService();
+                UserModel? user = await authService.signInWithGoogle();
+                if (user != null) {
+                  _navigateToHomeOrCompleteRegistration(context, user);
+                } else {
+                  _showSnackBar(
+                      context, 'Google Sign-In failed. Please try again.');
+                }
+              },
+              text: 'Sign in with Google',
+            ),
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/searcherHome');
+              },
+              child: const Text(
+                'Skip for now',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text("Ma andekech compte?"),
                 TextButton(
+                  onPressed: () {
+                    widget.showRegisterPage();
+                  },
                   child: const Text(
                     'A3mel Compte',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () {
-                    widget.showRegisterPage();
-                  },
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _navigateToHomeOrCompleteRegistration(
+      BuildContext context, UserModel user) {
+    if (user.type == 'provider') {
+      Navigator.pushReplacementNamed(context, '/providerHome');
+    } else if (user.type == 'searcher') {
+      Navigator.pushReplacementNamed(context, '/searcherHome');
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GoogleRegisterInterface(
+            showLoginPage: widget.showRegisterPage,
+            googleEmail: user.email ?? '', // Pass google email
+          ),
+        ),
+      );
+    }
+  }
+
+  void _navigateToHome(BuildContext context, UserModel user) {
+    if (user.type == 'provider') {
+      Navigator.pushReplacementNamed(context, '/providerHome');
+    } else {
+      Navigator.pushReplacementNamed(context, '/searcherHome');
+    }
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
       ),
     );
   }

@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
-  final Color? backgroundColor; // Added backgroundColor parameter
+  final Color? backgroundColor;
+  final bool loading;
 
-  const CustomButton(
-      {super.key,
-      required this.onPressed,
-      required this.text,
-      this.backgroundColor}); // Updated constructor
+  const CustomButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    this.backgroundColor,
+    this.loading = false, // Added loading parameter with default value
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +29,18 @@ class CustomButton extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       ),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
+      child: loading
+          ? SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            )
+          : Text(
+              text,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
     );
   }
 }

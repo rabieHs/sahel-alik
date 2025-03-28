@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:sahel_alik/views/widgets/custom_button.dart';
 import 'package:sahel_alik/utils/image_upload_utils.dart'; // Import image upload utility
 import 'package:sahel_alik/services/service_service.dart'; // Import ServiceService
 import 'package:sahel_alik/models/service.dart'; // Import ServiceModel
 import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../widgets/custom_button.dart';
 
 class AddServiceInterface extends StatefulWidget {
   const AddServiceInterface({super.key});
@@ -22,7 +23,34 @@ class _AddServiceInterfaceState extends State<AddServiceInterface> {
   final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
   final _locationController = TextEditingController();
+  String? _selectedCategory; // To hold selected category
   File? _image;
+  List<String> serviceCategories = [
+    'Maid',
+    'Cleaner',
+    'Mechanic',
+    'Barber',
+    'Plumber',
+    'Electrician',
+    'Carpenter',
+    'Painter',
+    'Gardener',
+    'Chef',
+    'Tutor',
+    'Driver',
+    '搬家工', // Mover (Chinese)
+    '按摩师', // Masseuse (Chinese)
+    '裁缝', // Tailor (Chinese)
+    '美容师', // Beautician (Chinese)
+    '健身教练', // Fitness Coach (Chinese)
+    '活动策划', // Event Planner (Chinese)
+    '摄影师', // Photographer (Chinese)
+    '音乐家', // Musician (Chinese)
+    '艺术家', // Artist (Chinese)
+    '设计师', // Designer (Chinese)
+    '程序员', // Programmer (Chinese)
+    '翻译', // Translator (Chinese)
+  ];
   Position? _position;
   String? _address;
   bool _isLoading = false;
@@ -128,10 +156,24 @@ class _AddServiceInterfaceState extends State<AddServiceInterface> {
           : null,
       imageUrl: imageUrl,
       userId: FirebaseAuth.instance.currentUser?.uid,
+      category: _selectedCategory,
+    );
+
+    final serviceToUpload = ServiceModel(
+      title: _titleController.text,
+      description: _descriptionController.text,
+      price: double.tryParse(_priceController.text) ?? 0.0,
+      location: _position != null
+          ? GeoPoint(_position!.latitude, _position!.longitude)
+          : null,
+      imageUrl: imageUrl,
+      userId: FirebaseAuth.instance.currentUser?.uid,
+      category: _selectedCategory,
     );
 
     final serviceService = ServiceService();
-    ServiceModel? addedService = await serviceService.addService(service);
+    ServiceModel? addedService =
+        await serviceService.addService(serviceToUpload);
 
     setState(() {
       _isLoading = false;
@@ -205,6 +247,27 @@ class _AddServiceInterfaceState extends State<AddServiceInterface> {
                     height: 100,
                   ),
                 ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedCategory,
+                decoration: InputDecoration(
+                  labelText: 'Category',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                items: serviceCategories.map((String category) {
+                  return DropdownMenuItem<String>(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedCategory = newValue;
+                  });
+                },
+              ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _titleController,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahel_alik/models/service.dart';
-import 'package:sahel_alik/views/interfaces/provider/service_details_page.dart'; // Import ServiceModel
+import 'package:sahel_alik/views/interfaces/searcher/service_details_page.dart'; // Import ServiceDetailsPage
 
 class ServiceCard extends StatelessWidget {
   final ServiceModel service;
@@ -9,12 +9,17 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
+    return InkWell(
+      // Wrap Card with InkWell for tap action
+      onTap: () {
+        Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ServiceDetailsPage(
-                  service: service))), // Navigate to service details page
+            builder: (context) => ServiceDetailsPage(
+                service: service), // Navigate to service details page
+          ),
+        );
+      },
       child: Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(

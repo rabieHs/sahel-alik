@@ -47,5 +47,15 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs location access to provide location-based services.</string>
+	<!-- Deep Linking Configuration -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>https</string> <!-- Use your custom scheme -->
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sahel_alik/views/widgets/custom_button.dart';
+import '../profile_interface.dart';
 import 'add_service_interface.dart';
 import 'orders_interface.dart';
-import 'profile_interface.dart';
 import 'service_list_interface.dart';
 
 class ProviderHomeInterface extends StatefulWidget {
@@ -18,7 +18,7 @@ class _ProviderHomeInterfaceState extends State<ProviderHomeInterface> {
   static List<Widget> _widgetOptions = [
     ServiceListInterface(),
     ProviderOrdersInterface(),
-    ProfileInterface(),
+    const ProfileInterface(),
   ];
 
   void _onItemTapped(int index) {
