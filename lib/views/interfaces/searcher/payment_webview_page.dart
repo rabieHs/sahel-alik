@@ -6,12 +6,12 @@ import 'payment_error_page.dart';
 
 class PaymentWebViewPage extends StatefulWidget {
   final String paymentUrl;
-  final Function(bool) onPaymentResult;
+  final String orderId;
 
   const PaymentWebViewPage({
     Key? key,
+    required this.orderId,
     required this.paymentUrl,
-    required this.onPaymentResult,
   }) : super(key: key);
 
   @override
@@ -76,7 +76,7 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
                           // If status is true, payment is successful
                           debugPrint(
                               'Payment status from JSON: Success'); // Added debug print
-                          widget.onPaymentResult(true);
+
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -86,7 +86,6 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
                           // If status is false, payment failed
                           debugPrint(
                               'Payment status from JSON: Failed'); // Added debug print
-                          widget.onPaymentResult(false);
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -108,16 +107,16 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
                   if (url.contains('return_url.tn')) {
                     debugPrint(
                         'Payment status from URL: Success (return_url.tn)');
-                    widget.onPaymentResult(true);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaymentSuccessPage()),
+                          builder: (context) => PaymentSuccessPage(
+                                orderId: widget.orderId,
+                              )),
                     );
                   } else if (url.contains('cancel_url.tn')) {
                     debugPrint(
                         'Payment status from URL: Failed (cancel_url.tn)');
-                    widget.onPaymentResult(false);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -129,16 +128,16 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
                   else if (url.contains('success')) {
                     debugPrint(
                         'Payment status from URL: Success (generic keyword)');
-                    widget.onPaymentResult(true);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaymentSuccessPage()),
+                          builder: (context) => PaymentSuccessPage(
+                                orderId: widget.orderId,
+                              )),
                     );
                   } else if (url.contains('fail') || url.contains('error')) {
                     debugPrint(
                         'Payment status from URL: Failed (generic keyword)');
-                    widget.onPaymentResult(false);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

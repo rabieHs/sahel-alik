@@ -313,24 +313,8 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
             context,
             MaterialPageRoute(
               builder: (context) => PaymentWebViewPage(
+                orderId: request.bookingRequestId!,
                 paymentUrl: checkoutUrl,
-                onPaymentResult: (bool paymentResult) {
-                  if (paymentResult) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentSuccessPage(),
-                      ),
-                    );
-                  } else {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentErrorPage(),
-                      ),
-                    );
-                  }
-                },
               ),
             ),
           );
