@@ -240,9 +240,6 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
             ),
           ],
         ),
-        if (_isLoading)
-          const Center(
-              child: CircularProgressIndicator()), // Loading indicator in Stack
       ],
     );
   }

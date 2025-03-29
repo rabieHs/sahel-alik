@@ -49,6 +49,7 @@ dependencies:
   webview_flutter: ^4.8.0 # Added webview_flutter
   app_links: ^6.4.0 # Replaced uni_links with app_links
   http: ^1.2.1 # Added http for API calls
+  google_generative_ai: ^0.2.1
 
 dev_dependencies:
   flutter_test:

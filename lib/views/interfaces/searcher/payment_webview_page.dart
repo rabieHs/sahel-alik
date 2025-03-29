@@ -46,24 +46,30 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
                 },
                 onPageFinished: (String url) async {
                   debugPrint('WebView finished loading URL: $url');
-                  // Check if the loaded URL is the Paymee gateway URL
-                  if (url.startsWith('https://sandbox.paymee.tn/gateway')) {
-                    debugPrint('Detected Paymee gateway URL.');
+                  // Check if the loaded URL is the Paymee gateway URL or a URL that might contain the JSON response.
+                  if (url.startsWith('https://sandbox.paymee.tn/gateway') ||
+                      url.contains('return_url.tn') ||
+                      url.contains('cancel_url.tn')) {
+                    debugPrint(
+                        'Detected Paymee gateway URL or return/cancel URL.');
                     // Attempt to extract JSON from <pre> tag or body if <pre> is not found
                     String? pageSource = await _webViewController
                         ?.runJavaScriptReturningResult('''
                       (function() {
-                        var preTags = document.getElementsByTagName('pre');
-                        if (preTags.length > 0) {
-                          return preTags[0].innerText;
-                        } else {
-                          return document.body.innerText;
+                        try {
+                          var preTags = document.getElementsByTagName('pre');
+                          if (preTags.length > 0) {
+                            return preTags[0].innerText;
+                          } else {
+                            return document.body.innerText;
+                          }
+                        } catch (e) {
+                          return '{"status": false, "message": "Failed to extract page content", "code": -1}';
                         }
                       })();
                     ''') as String?;
                     debugPrint('Page source from WebView: $pageSource');
 
-                    // Try to parse the page content as JSON
                     if (pageSource != null && pageSource.trim().isNotEmpty) {
                       try {
                         Map<String, dynamic> responseJson =
@@ -71,78 +77,49 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
                         debugPrint(
                             "Paymee API Response (parsed): $responseJson");
 
-                        // Check the 'status' field in the JSON response
                         if (responseJson['status'] == true) {
-                          // If status is true, payment is successful
-                          debugPrint(
-                              'Payment status from JSON: Success'); // Added debug print
-
+                          debugPrint('Payment status: Success');
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PaymentSuccessPage()),
+                              builder: (context) => PaymentSuccessPage(
+                                orderId: widget.orderId,
+                              ),
+                            ),
                           );
                         } else {
-                          // If status is false, payment failed
-                          debugPrint(
-                              'Payment status from JSON: Failed'); // Added debug print
+                          debugPrint('Payment status: Failed');
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PaymentErrorPage()),
+                              builder: (context) => PaymentErrorPage(),
+                            ),
                           );
                         }
                       } catch (e) {
-                        // JSON parsing failed
                         debugPrint("Error parsing JSON: $e");
                         debugPrint(
                             'Page source that failed to parse: $pageSource');
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PaymentErrorPage(),
+                          ),
+                        );
                       }
                     } else {
-                      debugPrint('Page source is null or empty.');
+                      debugPrint(
+                          'Page source is null or empty, or not a JSON response.');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PaymentErrorPage(),
+                        ),
+                      );
                     }
-                  }
-
-                  // Check for specific return URLs for success and failure FIRST
-                  if (url.contains('return_url.tn')) {
+                  } else {
                     debugPrint(
-                        'Payment status from URL: Success (return_url.tn)');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentSuccessPage(
-                                orderId: widget.orderId,
-                              )),
-                    );
-                  } else if (url.contains('cancel_url.tn')) {
-                    debugPrint(
-                        'Payment status from URL: Failed (cancel_url.tn)');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentErrorPage()),
-                    );
-                  }
-                  // Fallback to check for generic success/fail/error keywords in URL
-                  // only if specific return/cancel URLs are not found
-                  else if (url.contains('success')) {
-                    debugPrint(
-                        'Payment status from URL: Success (generic keyword)');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentSuccessPage(
-                                orderId: widget.orderId,
-                              )),
-                    );
-                  } else if (url.contains('fail') || url.contains('error')) {
-                    debugPrint(
-                        'Payment status from URL: Failed (generic keyword)');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentErrorPage()),
-                    );
+                        'URL is not a Paymee gateway URL, ignoring JSON check.');
                   }
                 },
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahel_alik/views/interfaces/searcher/chatbot_screen.dart';
 import 'package:sahel_alik/views/interfaces/searcher/searcher_orders_tab.dart';
 import 'package:sahel_alik/views/interfaces/searcher/searcher_services_tab.dart';
 
@@ -9,7 +10,7 @@ import '../profile_interface.dart';
 import '../../../utils/location_utils.dart';
 
 class SearcherHomeInterface extends StatefulWidget {
-  const SearcherHomeInterface({super.key});
+  const SearcherHomeInterface({Key? key}) : super(key: key);
 
   @override
   State<SearcherHomeInterface> createState() => _SearcherHomeInterfaceState();
@@ -89,6 +90,76 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
     });
   }
 
+  void _filterServices(String query) {
+    String lowerCaseQuery = query.toLowerCase();
+    List<ServiceModel> filteredList = [];
+    if (query.isNotEmpty) {
+      filteredList = _services
+          .where((service) =>
+              service.title!.toLowerCase().contains(lowerCaseQuery) ||
+              service.description!.toLowerCase().contains(lowerCaseQuery))
+          .toList();
+    } else {
+      filteredList = List.from(_services);
+    }
+    setState(() {
+      _filteredServices = filteredList;
+    });
+  }
+
+  Future<void> _showFilterDialog(BuildContext context) async {
+    double tempRadius = _radius; // Temporary radius value for the dialog
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Filter by Radius'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter dialogSetState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Text('Select radius (km):'),
+                  Slider(
+                    value: tempRadius,
+                    min: 1.0,
+                    max: 20.0,
+                    divisions: 19,
+                    label: tempRadius.round().toString(),
+                    onChanged: (double value) {
+                      dialogSetState(() {
+                        tempRadius = value;
+                      });
+                    },
+                  ),
+                  Text('${tempRadius.toStringAsFixed(1)} km'),
+                ],
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Apply'),
+              onPressed: () {
+                setState(() {
+                  _radius = tempRadius;
+                });
+                _fetchServices(radius: _radius);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = <Widget>[
@@ -130,77 +201,15 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
-    );
-  }
-
-  void _filterServices(String query) {
-    String lowerCaseQuery = query.toLowerCase();
-    List<ServiceModel> filteredList = [];
-    if (query.isNotEmpty) {
-      filteredList = _services
-          .where((service) =>
-              service.title!.toLowerCase().contains(lowerCaseQuery) ||
-              service.description!.toLowerCase().contains(lowerCaseQuery))
-          .toList();
-    } else {
-      filteredList = List.from(_services);
-    }
-    setState(() {
-      _filteredServices = filteredList;
-    });
-  }
-
-  Future<void> _showFilterDialog(BuildContext context) async {
-    double tempRadius = _radius; // Temporary radius value for the dialog
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Filter by Radius'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Text('Select radius (km):'),
-                  Slider(
-                    value: tempRadius,
-                    min: 1.0,
-                    max: 20.0,
-                    divisions: 19,
-                    label: tempRadius.round().toString(),
-                    onChanged: (double value) {
-                      setState(() {
-                        tempRadius = value;
-                      });
-                    },
-                  ),
-                  Text('${tempRadius.toStringAsFixed(1)} km'),
-                ],
-              );
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Apply'),
-              onPressed: () {
-                setState(() {
-                  _radius = tempRadius; // Update radius with temp value
-                });
-                _fetchServices(
-                    radius: _radius); // Re-fetch services with radius
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+          );
+        },
+        child: const Icon(Icons.chat),
+      ),
     );
   }
 }
