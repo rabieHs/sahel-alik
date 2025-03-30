@@ -2,24 +2,66 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'payment_success_page.dart';
+import '../../../models/booking_request.dart';
 import 'payment_error_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import firestore
 
-class PaymentWebViewPage extends StatefulWidget {
+class PaymentWebviewPage extends StatefulWidget {
   final String paymentUrl;
   final String orderId;
 
-  const PaymentWebViewPage({
+  const PaymentWebviewPage({
     Key? key,
-    required this.orderId,
     required this.paymentUrl,
+    required this.orderId, // Add orderId parameter
   }) : super(key: key);
 
   @override
-  _PaymentWebViewPageState createState() => _PaymentWebViewPageState();
+  _PaymentWebviewPageState createState() => _PaymentWebviewPageState();
 }
 
-class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
+class _PaymentWebviewPageState extends State<PaymentWebviewPage> {
   WebViewController? _webViewController;
+  BookingRequestModel? _bookingRequest; // State variable for booking request
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBookingRequest(); // Fetch booking request when page loads
+  }
+
+  Future<void> _fetchBookingRequest() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('booking_requests')
+          .doc(widget.orderId)
+          .get();
+
+      if (snapshot.exists) {
+        setState(() {
+          _bookingRequest = BookingRequestModel.fromFirestore(snapshot);
+        });
+      } else {
+        // Handle case where booking request is not found
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Booking request not found.')), // Handle not found
+        );
+        Navigator.pop(context); // Go back if booking request not found
+      }
+    } catch (error) {
+      // Handle error fetching booking request
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content:
+                Text('Error fetching booking request: $error')), // Handle error
+      );
+      Navigator.pop(context); // Go back on error
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +125,8 @@ class _PaymentWebViewPageState extends State<PaymentWebViewPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => PaymentSuccessPage(
-                                orderId: widget.orderId,
+                                orderId: widget.orderId, // Pass orderId
+                                paymentResponse: responseJson,
                               ),
                             ),
                           );

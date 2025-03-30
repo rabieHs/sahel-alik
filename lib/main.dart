@@ -107,11 +107,12 @@ class _MyAppState extends State<MyApp> {
             const PaymentSuccessPage(), // Add success route
         '/paymentError': (context) =>
             const PaymentErrorPage(), // Add error route
-        BookingScreen.routeName: (context) {
+        '/bookingScreen': (context) {
           final args = ModalRoute.of(context)!.settings.arguments
               as Map<String, dynamic>;
-          final service = args['service'] as ServiceModel;
-          return BookingScreen(service: service);
+          final serviceId = args['serviceId'] as String;
+          final providerId = args['providerId'] as String;
+          return BookingScreen(serviceId: serviceId, providerId: providerId);
         },
         '/login': (context) => LoginInterface(showRegisterPage: () {}),
       },

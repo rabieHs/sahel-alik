@@ -145,10 +145,14 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                     final authService = AuthService();
                     final user = await authService.getCurrentUser();
                     if (user != null) {
-                      Navigator.pushNamed(
+                      Navigator.push(
                         context,
-                        BookingScreen
-                            .routeName, // Navigate to booking screen if logged in
+                        MaterialPageRoute(
+                          builder: (context) => BookingScreen(
+                            serviceId: widget.service.id!,
+                            providerId: widget.service.userId!,
+                          ),
+                        ),
                       );
                     } else {
                       Navigator.pushNamed(

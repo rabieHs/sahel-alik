@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sahel_alik/models/service.dart';
+import 'package:sahel_alik/views/interfaces/provider/service_details_page.dart';
 import 'package:sahel_alik/views/interfaces/searcher/service_details_page.dart'; // Import ServiceDetailsPage
 
 class ServiceCard extends StatelessWidget {
   final ServiceModel service;
-
-  const ServiceCard({super.key, required this.service});
+  final bool isProvider;
+  const ServiceCard(
+      {super.key, required this.service, this.isProvider = false});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,10 @@ class ServiceCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ServiceDetailsPage(
-                service: service), // Navigate to service details page
+            builder: (context) => isProvider
+                ? ProviderServiceDetailsPage(service: service)
+                : ServiceDetailsPage(
+                    service: service), // Navigate to service details page
           ),
         );
       },

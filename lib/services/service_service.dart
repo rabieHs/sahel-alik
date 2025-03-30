@@ -84,16 +84,20 @@ class ServiceService {
     }
   }
 
-  // Get services for a specific provider (user)
-  Future<List<ServiceModel>> getServicesForProvider() async {
+  // Get services for a specific provider (user) and status
+  Future<List<ServiceModel>> getServicesForProvider(String status) async {
     try {
       String? userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
         return []; // No user logged in
       }
 
-      QuerySnapshot querySnapshot =
-          await _serviceCollection.where('userId', isEqualTo: userId).get();
+      Query query = _serviceCollection.where('userId', isEqualTo: userId);
+      if (status != 'all') {
+        query = query.where('status', isEqualTo: status);
+      }
+
+      QuerySnapshot querySnapshot = await query.get();
 
       return querySnapshot.docs
           .map((doc) =>

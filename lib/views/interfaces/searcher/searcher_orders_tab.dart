@@ -204,8 +204,7 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
                 text: 'Confirm Payment',
                 onPressed: () {
                   Navigator.pop(context);
-                  _completeOrderAndRating(
-                      context, request, _rating); // Corrected function call
+                  _paymentRequested(context, request, _rating);
                 },
               ),
             ],
@@ -213,6 +212,34 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
         );
       },
     );
+  }
+
+  void _paymentRequested(
+      BuildContext context, BookingRequestModel request, double rating) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('booking_requests')
+          .doc(request.bookingRequestId)
+          .update({
+        'status': 'payment_request',
+        'paymentMethod': 'cash',
+        'userRating': rating,
+      });
+      debugPrint(
+          'Booking request ${request.bookingRequestId} status updated to payment_request');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content:
+                Text('Payment requested. Status updated to payment_request.')),
+      );
+      setState(() {});
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error requesting payment: $error')),
+      );
+    }
   }
 
   void _payOnline(BuildContext context, BookingRequestModel request) async {
@@ -312,7 +339,7 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PaymentWebViewPage(
+              builder: (context) => PaymentWebviewPage(
                 orderId: request.bookingRequestId!,
                 paymentUrl: checkoutUrl,
               ),

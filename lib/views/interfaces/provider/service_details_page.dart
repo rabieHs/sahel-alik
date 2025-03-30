@@ -7,16 +7,17 @@ import '../../../services/auth_service.dart'; // Import AuthService
 import '../../../models/user.dart'; // Import UserModel
 import '../../interfaces/searcher/booking_screen.dart'; // Corrected import path for BookingScreen
 
-class ServiceDetailsPage extends StatefulWidget {
+class ProviderServiceDetailsPage extends StatefulWidget {
   final ServiceModel service;
 
-  const ServiceDetailsPage({Key? key, required this.service}) : super(key: key);
+  const ProviderServiceDetailsPage({Key? key, required this.service})
+      : super(key: key);
 
   @override
   _ServiceDetailsPageState createState() => _ServiceDetailsPageState();
 }
 
-class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
+class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
   UserModel? provider;
 
   @override
@@ -141,25 +142,6 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                   backgroundColor: Colors.red, // Red color for delete button
                 ),
               ],
-            ),
-            SizedBox(height: 32),
-            CustomButton(
-              text: 'Book Service',
-              onPressed: () async {
-                AuthService authService = AuthService();
-                UserModel? currentUser = await authService.getCurrentUser();
-                if (currentUser != null) {
-                  // User is logged in, navigate to booking page
-                  Navigator.pushNamed(
-                    context,
-                    BookingScreen.routeName,
-                    arguments: {'service': widget.service},
-                  );
-                } else {
-                  // User is not logged in, navigate to login page
-                  Navigator.pushNamed(context, '/login');
-                }
-              },
             ),
           ],
         ),

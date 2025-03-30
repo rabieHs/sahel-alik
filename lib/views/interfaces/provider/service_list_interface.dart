@@ -28,7 +28,7 @@ class _ServiceListInterfaceState extends State<ServiceListInterface> {
     });
     final serviceService = ServiceService();
     List<ServiceModel> fetchedServices =
-        await serviceService.getServicesForProvider();
+        await serviceService.getServicesForProvider('all');
     setState(() {
       _services = fetchedServices;
       _filteredServices = fetchedServices; // Initially show all services
@@ -78,7 +78,9 @@ class _ServiceListInterfaceState extends State<ServiceListInterface> {
                 itemCount: _filteredServices.length, // Use _filteredServices
                 itemBuilder: (context, index) {
                   return ServiceCard(
-                    service: _filteredServices[index], // Use _filteredServices
+                    service: _filteredServices[index],
+                    isProvider: true,
+                    // Use _filteredServices
                   );
                 },
               ),

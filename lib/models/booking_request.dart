@@ -41,6 +41,23 @@ class BookingRequestModel {
     );
   }
 
+  factory BookingRequestModel.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    return BookingRequestModel(
+      bookingRequestId: data?['bookingRequestId'],
+      userId: data?['userId'],
+      providerId: data?['providerId'],
+      serviceId: data?['serviceId'],
+      dateTime: data?['dateTime']?.toDate(),
+      description: data?['description'],
+      status: data?['status'] ?? 'pending',
+      paymentMethod: data?['paymentMethod'],
+      userRating: (data?['userRating'] as num?)?.toDouble(),
+      createdAt: data?['createdAt'],
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'bookingRequestId': bookingRequestId,

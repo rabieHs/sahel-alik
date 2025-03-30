@@ -5,6 +5,7 @@ class UserModel {
   String? phone;
   String? type; // 'provider' or 'searcher'
   String? profileImage;
+  double? balance; // Provider balance in TND, nullable
 
   UserModel({
     this.uid,
@@ -13,6 +14,7 @@ class UserModel {
     this.phone,
     this.type,
     this.profileImage,
+    this.balance,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,9 @@ class UserModel {
       phone: json['phone'],
       type: json['type'],
       profileImage: json['profileImage'],
+      balance: json['balance'] != null
+          ? json['balance'].toDouble()
+          : 0.0, // Default to 0 if null
     );
   }
 
@@ -34,6 +39,7 @@ class UserModel {
       'phone': phone,
       'type': type,
       'profileImage': profileImage,
+      'balance': balance ?? 0.0,
     };
   }
 }

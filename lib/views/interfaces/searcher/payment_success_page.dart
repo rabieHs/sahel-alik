@@ -8,11 +8,8 @@ class PaymentSuccessPage extends StatefulWidget {
   final String? orderId;
   final Map<String, dynamic>? paymentResponse;
 
-  const PaymentSuccessPage({
-    Key? key,
-    this.orderId,
-    this.paymentResponse,
-  }) : super(key: key);
+  const PaymentSuccessPage({Key? key, this.orderId, this.paymentResponse})
+      : super(key: key);
 
   @override
   _PaymentSuccessPageState createState() => _PaymentSuccessPageState();
@@ -62,7 +59,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                   widget.paymentResponse!['data'] != null)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
+                  children: [
                     _buildPaymentDetail(
                         'Token', widget.paymentResponse!['data']['token']),
                     _buildPaymentDetail('Amount',
@@ -73,7 +70,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                         'Email', widget.paymentResponse!['data']['email']),
                   ],
                 ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               RatingBar.builder(
                 initialRating: _rating,
                 minRating: 1,

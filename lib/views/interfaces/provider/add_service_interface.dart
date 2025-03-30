@@ -38,18 +38,7 @@ class _AddServiceInterfaceState extends State<AddServiceInterface> {
     'Chef',
     'Tutor',
     'Driver',
-    '搬家工', // Mover (Chinese)
-    '按摩师', // Masseuse (Chinese)
-    '裁缝', // Tailor (Chinese)
-    '美容师', // Beautician (Chinese)
-    '健身教练', // Fitness Coach (Chinese)
-    '活动策划', // Event Planner (Chinese)
-    '摄影师', // Photographer (Chinese)
-    '音乐家', // Musician (Chinese)
-    '艺术家', // Artist (Chinese)
-    '设计师', // Designer (Chinese)
-    '程序员', // Programmer (Chinese)
-    '翻译', // Translator (Chinese)
+    'More',
   ];
   Position? _position;
   String? _address;
