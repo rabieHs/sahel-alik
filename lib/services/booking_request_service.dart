@@ -55,10 +55,13 @@ class BookingRequestService {
 
   Future<void> updateBookingRequestStatus(
       String bookingRequestId, String status,
-      {double? userRating}) async {
+      {double? userRating, double? price}) async {
     Map<String, dynamic> updateData = {'status': status};
     if (userRating != null) {
       updateData['userRating'] = userRating;
+    }
+    if (price != null) {
+      updateData['price'] = price;
     }
     await _bookingRequestsCollection.doc(bookingRequestId).update(updateData);
   }

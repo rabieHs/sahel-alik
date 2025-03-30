@@ -98,9 +98,9 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          _acceptRequest(context, request);
+                          _showPriceDialog(context, request);
                         },
-                        child: const Text('Accept'),
+                        child: const Text('Set Price'),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -151,16 +151,6 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
     );
   }
 
-  Future<void> _acceptRequest(
-      BuildContext context, BookingRequestModel request) async {
-    await _bookingRequestService.updateBookingRequestStatus(
-        request.bookingRequestId!, 'active');
-    _loadBookingRequests();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Request Accepted')),
-    );
-  }
-
   Future<void> _rejectRequest(
       BuildContext context, BookingRequestModel request) async {
     await _bookingRequestService.updateBookingRequestStatus(
@@ -184,7 +174,60 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
     );
   }
 
-  @override
+  Future<void> _showPriceDialog(
+      BuildContext context, BookingRequestModel request) async {
+    final priceController = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Set Price for Service'),
+          content: TextField(
+            controller: priceController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(hintText: 'Enter your price'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Set Price'),
+              onPressed: () {
+                double? price = double.tryParse(priceController.text);
+                if (price != null) {
+                  _sendPriceRequest(context, request, price);
+                  Navigator.of(context).pop();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Invalid price')),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _sendPriceRequest(
+      BuildContext context, BookingRequestModel request, double price) async {
+    await _bookingRequestService.updateBookingRequestStatus(
+      request.bookingRequestId!,
+      'price_request',
+      price: price,
+    );
+    debugPrint('Price sent for request ${request.bookingRequestId}: $price');
+    _loadBookingRequests();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Price requested')),
+    );
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

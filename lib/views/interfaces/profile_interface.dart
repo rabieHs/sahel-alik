@@ -63,6 +63,7 @@ class _ProfileInterfaceState extends State<ProfileInterface> {
                       _buildInfoRow('Email', _user?.email ?? 'N/A'),
                       _buildInfoRow('Phone', _user?.phone ?? 'N/A'),
                       _buildInfoRow('Type', _user?.type ?? 'N/A'),
+                      _buildInfoRow('BALNCE', "${_user?.balance} TND"),
                       const SizedBox(height: 30),
                       Center(
                         child: ElevatedButton(

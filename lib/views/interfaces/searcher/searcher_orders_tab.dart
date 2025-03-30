@@ -44,20 +44,20 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
         isScrollable: true, // Added isScrollable
         tabs: const [
           Tab(text: 'Pending'),
+          Tab(text: 'Price Confirmation'), // Added Price Confirmation tab
           Tab(text: 'Active'),
           Tab(text: 'Completed'),
-          Tab(text: 'Finished'), // Added Finished tab
-          Tab(text: 'All'),
+          Tab(text: 'Finished'),
         ],
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
           _buildOrdersTab('pending'),
+          _buildOrdersTab('price_request'), // Added price_request tab
           _buildOrdersTab('active'),
           _buildOrdersTab('completed'),
-          _buildOrdersTab('finished'), // Added Finished tab
-          _buildOrdersTab('all'),
+          _buildOrdersTab('finished'),
         ],
       ),
     );
@@ -92,11 +92,31 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
                     Text('Service ID: ${request.serviceId}'),
                     Text('Date/Time: ${request.dateTime}'),
                     Text('Description: ${request.description}'),
+                    if (request.status == 'price_request')
+                      Text(
+                          'Provider Price: ${request.price}'), // Display provider price
                     Text(
-                        'User Rating: ${request.paymentMethod == 'cash' && request.status == 'finished' ? 'You rated this service ${request.userRating ?? _rating} stars' : 'Not rated yet'}'), // Display user rating
+                        'User Rating: ${request.paymentMethod == 'cash' && request.status == 'finished' ? 'You rated this service ${request.userRating ?? _rating} stars' : 'Not rated yet'}'),
                     Text('Status: ${request.status}'),
                     const SizedBox(height: 10),
-                    // Conditionally render buttons based on status
+                    if (request.status == 'price_request')
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              _confirmPrice(context, request);
+                            },
+                            child: const Text('Confirm Price'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              _rejectPrice(context, request);
+                            },
+                            child: const Text('Reject Price'),
+                          ),
+                        ],
+                      ),
                     if (request.status == 'completed')
                       CustomButton(
                         text: 'Pay',
@@ -129,10 +149,11 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
           .collection('booking_requests')
           .where('userId', isEqualTo: user.uid);
 
-      if (status != 'all') {
+      if (status != 'all' && status != 'price_request') {
+        query = query.where('status', isEqualTo: status);
+      } else if (status == 'price_request') {
         query = query.where('status', isEqualTo: status);
       }
-      // Removed redundant check for status == 'finished' as it's covered above
 
       final bookingRequestsSnapshot = await query.get();
       return bookingRequestsSnapshot.docs
@@ -288,7 +309,7 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
     }
     ServiceModel service =
         ServiceModel.fromJson(serviceDoc.data() as Map<String, dynamic>);
-    double amount = service.price ?? 0.0;
+    double amount = request.price ?? 0.0;
 
     final Map<String, dynamic> paymentData = {
       'amount': amount,
@@ -340,9 +361,10 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
             context,
             MaterialPageRoute(
               builder: (context) => PaymentWebviewPage(
-                orderId: request.bookingRequestId!,
-                paymentUrl: checkoutUrl,
-              ),
+                  orderId: request.bookingRequestId!,
+                  paymentUrl: checkoutUrl,
+                  providerId: request.providerId!,
+                  price: request.price ?? 0.0),
             ),
           );
         } else {
@@ -435,5 +457,29 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
         SnackBar(content: Text('Error completing order and rating: $error')),
       );
     }
+  }
+
+  Future<void> _confirmPrice(
+      BuildContext context, BookingRequestModel request) async {
+    await FirebaseFirestore.instance
+        .collection('booking_requests')
+        .doc(request.bookingRequestId)
+        .update({'status': 'active'});
+    setState(() {});
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Price Confirmed')),
+    );
+  }
+
+  Future<void> _rejectPrice(
+      BuildContext context, BookingRequestModel request) async {
+    await FirebaseFirestore.instance
+        .collection('booking_requests')
+        .doc(request.bookingRequestId)
+        .update({'status': 'pending'});
+    setState(() {});
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Price Rejected')),
+    );
   }
 }

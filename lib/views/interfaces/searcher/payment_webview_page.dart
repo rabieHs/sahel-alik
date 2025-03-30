@@ -9,12 +9,16 @@ import 'package:cloud_firestore/cloud_firestore.dart'; // Import firestore
 class PaymentWebviewPage extends StatefulWidget {
   final String paymentUrl;
   final String orderId;
+  final String providerId;
+  final double price;
 
-  const PaymentWebviewPage({
-    Key? key,
-    required this.paymentUrl,
-    required this.orderId, // Add orderId parameter
-  }) : super(key: key);
+  const PaymentWebviewPage(
+      {Key? key,
+      required this.paymentUrl,
+      required this.orderId, // Add orderId parameter
+      required this.providerId,
+      required this.price})
+      : super(key: key);
 
   @override
   _PaymentWebviewPageState createState() => _PaymentWebviewPageState();
@@ -23,45 +27,6 @@ class PaymentWebviewPage extends StatefulWidget {
 class _PaymentWebviewPageState extends State<PaymentWebviewPage> {
   WebViewController? _webViewController;
   BookingRequestModel? _bookingRequest; // State variable for booking request
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchBookingRequest(); // Fetch booking request when page loads
-  }
-
-  Future<void> _fetchBookingRequest() async {
-    try {
-      DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-          .instance
-          .collection('booking_requests')
-          .doc(widget.orderId)
-          .get();
-
-      if (snapshot.exists) {
-        setState(() {
-          _bookingRequest = BookingRequestModel.fromFirestore(snapshot);
-        });
-      } else {
-        // Handle case where booking request is not found
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Booking request not found.')), // Handle not found
-        );
-        Navigator.pop(context); // Go back if booking request not found
-      }
-    } catch (error) {
-      // Handle error fetching booking request
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                Text('Error fetching booking request: $error')), // Handle error
-      );
-      Navigator.pop(context); // Go back on error
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,30 +53,24 @@ class _PaymentWebviewPageState extends State<PaymentWebviewPage> {
                 },
                 onPageFinished: (String url) async {
                   debugPrint('WebView finished loading URL: $url');
-                  // Check if the loaded URL is the Paymee gateway URL or a URL that might contain the JSON response.
-                  if (url.startsWith('https://sandbox.paymee.tn/gateway') ||
-                      url.contains('return_url.tn') ||
-                      url.contains('cancel_url.tn')) {
-                    debugPrint(
-                        'Detected Paymee gateway URL or return/cancel URL.');
+                  // Check if the loaded URL is the Paymee gateway URL
+                  if (url.startsWith('https://sandbox.paymee.tn/gateway')) {
+                    debugPrint('Detected Paymee gateway URL.');
                     // Attempt to extract JSON from <pre> tag or body if <pre> is not found
                     String? pageSource = await _webViewController
                         ?.runJavaScriptReturningResult('''
                       (function() {
-                        try {
-                          var preTags = document.getElementsByTagName('pre');
-                          if (preTags.length > 0) {
-                            return preTags[0].innerText;
-                          } else {
-                            return document.body.innerText;
-                          }
-                        } catch (e) {
-                          return '{"status": false, "message": "Failed to extract page content", "code": -1}';
+                        var preTags = document.getElementsByTagName('pre');
+                        if (preTags.length > 0) {
+                          return preTags[0].innerText;
+                        } else {
+                          return document.body.innerText;
                         }
                       })();
                     ''') as String?;
                     debugPrint('Page source from WebView: $pageSource');
 
+                    // Try to parse the page content as JSON
                     if (pageSource != null && pageSource.trim().isNotEmpty) {
                       try {
                         Map<String, dynamic> responseJson =
@@ -119,50 +78,88 @@ class _PaymentWebviewPageState extends State<PaymentWebviewPage> {
                         debugPrint(
                             "Paymee API Response (parsed): $responseJson");
 
+                        // Check the 'status' field in the JSON response
                         if (responseJson['status'] == true) {
-                          debugPrint('Payment status: Success');
+                          // If status is true, payment is successful
+                          debugPrint(
+                              'Payment status from JSON: Success'); // Added debug print
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PaymentSuccessPage(
-                                orderId: widget.orderId, // Pass orderId
-                                paymentResponse: responseJson,
-                              ),
-                            ),
+                                builder: (context) => PaymentSuccessPage(
+                                    orderId: widget.orderId,
+                                    providerId: widget.providerId,
+                                    price: widget.price, // Pass the price
+                                    paymentResponse: responseJson)),
                           );
                         } else {
-                          debugPrint('Payment status: Failed');
+                          // If status is false, payment failed
+                          debugPrint(
+                              'Payment status from JSON: Failed'); // Added debug print
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PaymentErrorPage(),
-                            ),
+                                builder: (context) => PaymentErrorPage()),
                           );
                         }
                       } catch (e) {
+                        // JSON parsing failed
                         debugPrint("Error parsing JSON: $e");
                         debugPrint(
                             'Page source that failed to parse: $pageSource');
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PaymentErrorPage(),
-                          ),
-                        );
                       }
                     } else {
-                      debugPrint(
-                          'Page source is null or empty, or not a JSON response.');
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PaymentErrorPage(),
-                        ),
-                      );
+                      debugPrint('Page source is null or empty.');
                     }
-                  } else {
+                  }
+
+                  // Check for specific return URLs for success and failure FIRST
+                  if (url.contains('return_url.tn')) {
                     debugPrint(
-                        'URL is not a Paymee gateway URL, ignoring JSON check.');
+                        'Payment status from URL: Success (return_url.tn)');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentSuccessPage(
+                              orderId: widget.orderId,
+                              providerId: widget.providerId,
+                              price: widget.price, // Pass the price
+                              paymentResponse: null // Pass null for now
+                              )),
+                    );
+                  } else if (url.contains('cancel_url.tn')) {
+                    debugPrint(
+                        'Payment status from URL: Failed (cancel_url.tn)');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentErrorPage()),
+                    );
+                  }
+                  // Fallback to check for generic success/fail/error keywords in URL
+                  // only if specific return/cancel URLs are not found
+                  else if (url.contains('success')) {
+                    debugPrint(
+                        'Payment status from URL: Success (generic keyword)');
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentSuccessPage(
+                              orderId: widget.orderId,
+                              providerId: widget.providerId,
+                              price: widget.price, // Pass the price
+                              paymentResponse: null // Pass null for now
+                              )),
+                    );
+                  } else if (url.contains('fail') || url.contains('error')) {
+                    debugPrint(
+                        'Payment status from URL: Failed (generic keyword)');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentErrorPage()),
+                    );
                   }
                 },
               ),

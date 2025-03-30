@@ -9,8 +9,9 @@ class BookingRequestModel {
   String? description;
   String? status;
   String? paymentMethod;
-  double? userRating; // Added userRating field
+  double? userRating;
   Timestamp? createdAt;
+  double? price; // Add price here
 
   BookingRequestModel({
     this.bookingRequestId,
@@ -21,8 +22,9 @@ class BookingRequestModel {
     this.description,
     this.status = 'pending',
     this.paymentMethod,
-    this.userRating, // Include userRating in constructor
+    this.userRating,
     this.createdAt,
+    this.price, // Add price in constructor
   });
 
   factory BookingRequestModel.fromJson(Map<String, dynamic> json) {
@@ -35,8 +37,8 @@ class BookingRequestModel {
       description: json['description'],
       status: json['status'] ?? 'pending',
       paymentMethod: json['paymentMethod'],
-      userRating: (json['userRating'] as num?)
-          ?.toDouble(), // Parse userRating from json
+      userRating: (json['userRating'] as num?)?.toDouble(),
+      price: (json['price'] as num?)?.toDouble(), // Add price in fromJson
       createdAt: json['createdAt'],
     );
   }
@@ -54,6 +56,7 @@ class BookingRequestModel {
       status: data?['status'] ?? 'pending',
       paymentMethod: data?['paymentMethod'],
       userRating: (data?['userRating'] as num?)?.toDouble(),
+      price: (data?['price'] as num?)?.toDouble(), // Add price in fromFirestore
       createdAt: data?['createdAt'],
     );
   }
@@ -68,7 +71,8 @@ class BookingRequestModel {
       'description': description,
       'status': status,
       'paymentMethod': paymentMethod,
-      'userRating': userRating, // Added userRating to toJson
+      'userRating': userRating,
+      'price': price, // Add price in toJson
       'createdAt': createdAt ?? Timestamp.now(),
     };
   }

@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sahel_alik/models/user.dart';
 import '../../../services/auth_service.dart';
 import 'searcher_home_interface.dart';
 
 class PaymentSuccessPage extends StatefulWidget {
   final String? orderId;
+  final String? providerId;
+  final double? price;
   final Map<String, dynamic>? paymentResponse;
 
-  const PaymentSuccessPage({Key? key, this.orderId, this.paymentResponse})
+  const PaymentSuccessPage(
+      {Key? key,
+      this.orderId,
+      this.paymentResponse,
+      this.providerId,
+      this.price})
       : super(key: key);
 
   @override
@@ -131,6 +139,18 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
           'paymentMethod': 'online',
           'userRating': _rating,
         });
+
+        double newBalance = user.balance! + widget.price!;
+
+        print("new balance: $newBalance");
+        print("new price: ${widget.price}");
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.providerId)
+            .update({
+          'balance': newBalance,
+        });
+
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Order completed and rated.')),
