@@ -31,6 +31,7 @@ class _RegisterInterfaceState extends State<RegisterInterface> {
               controller: _nameController,
               decoration: InputDecoration(
                 labelText: 'Esmek',
+                hintText: 'Esmek',
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -40,7 +41,8 @@ class _RegisterInterfaceState extends State<RegisterInterface> {
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: 'Gmail',
+                hintText: 'Gmail',
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -51,7 +53,8 @@ class _RegisterInterfaceState extends State<RegisterInterface> {
             TextFormField(
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'Password',
+                labelText: 'Mot de passe',
+                hintText: 'Mot de passe',
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -62,7 +65,8 @@ class _RegisterInterfaceState extends State<RegisterInterface> {
             TextFormField(
               controller: _phoneController,
               decoration: InputDecoration(
-                labelText: 'Phone Number',
+                labelText: 'Num tel',
+                hintText: 'Num tel',
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -72,7 +76,7 @@ class _RegisterInterfaceState extends State<RegisterInterface> {
             const SizedBox(height: 20),
             Row(
               children: [
-                const Text('3andek service'),
+                const Text('3andek service ?'),
                 Switch(
                   value: _isServiceProvider,
                   onChanged: (value) {
@@ -111,14 +115,14 @@ class _RegisterInterfaceState extends State<RegisterInterface> {
                     // Show error message
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Registration failed. Please try again.'),
+                        content: Text('Tasjil meklech. Aawed jarr.'),
                       ),
                     );
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Please fill in all fields.'),
+                      content: Text('Aabbi kol chay svp.'),
                     ),
                   );
                 }

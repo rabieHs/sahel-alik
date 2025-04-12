@@ -21,7 +21,7 @@ class _LoginInterfaceState extends State<LoginInterface> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Odkhol')),
+      appBar: AppBar(title: const Text('Odkhol (Login)')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -30,7 +30,7 @@ class _LoginInterfaceState extends State<LoginInterface> {
             TextFormField(
               controller: _emailController,
               decoration: const InputDecoration(
-                labelText: 'Email',
+                labelText: 'Gmail',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -41,7 +41,8 @@ class _LoginInterfaceState extends State<LoginInterface> {
             TextFormField(
               controller: _passwordController,
               decoration: const InputDecoration(
-                labelText: 'Password',
+                labelText: 'Mot de passe',
+                hintText: 'Mot de passe',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -61,14 +62,14 @@ class _LoginInterfaceState extends State<LoginInterface> {
                   if (user != null) {
                     _navigateToHome(context, user);
                   } else {
-                    _showSnackBar(context,
-                        'Login failed. Please check your credentials.');
+                    _showSnackBar(
+                        context, 'Login meklech. Thabet fi m3aloumet.');
                   }
                 } else {
-                  _showSnackBar(context, 'Please enter email and password');
+                  _showSnackBar(context, 'Adkhel email w mot de passe.');
                 }
               },
-              text: 'Odkhol',
+              text: 'Odkhol (Login)',
             ),
             const SizedBox(height: 20),
             CustomButton(
@@ -80,10 +81,10 @@ class _LoginInterfaceState extends State<LoginInterface> {
                   _navigateToHomeOrCompleteRegistration(context, user);
                 } else {
                   _showSnackBar(
-                      context, 'Google Sign-In failed. Please try again.');
+                      context, 'Odkhol b Google meklech. Aawed jarr.');
                 }
               },
-              text: 'Sign in with Google',
+              text: 'Odkhol b Google (Login)',
             ),
             const SizedBox(height: 20),
             TextButton(
@@ -91,20 +92,20 @@ class _LoginInterfaceState extends State<LoginInterface> {
                 Navigator.pushReplacementNamed(context, '/searcherHome');
               },
               child: const Text(
-                'Skip for now',
+                'Nfout dima (Skip)',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text("Ma andekech compte?"),
+                const Text("Ma andekech compte ? (No account?)"),
                 TextButton(
                   onPressed: () {
                     widget.showRegisterPage();
                   },
                   child: const Text(
-                    'A3mel Compte',
+                    'A3mel Compte (Register)',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),

@@ -41,7 +41,7 @@ class _ProfileInterfaceState extends State<ProfileInterface> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(title: const Text('Profil')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _user == null
