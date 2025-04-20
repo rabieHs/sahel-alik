@@ -25,7 +25,7 @@ class ServiceService {
           center: center,
           radius: radius,
           field: 'location',
-          strictMode: true,
+          strictMode: false, // Changed to false to include more results
         )
         .map((List<DocumentSnapshot<Object?>> documentList) {
       return documentList.map((doc) {
@@ -50,7 +50,7 @@ class ServiceService {
           center: center,
           radius: radius,
           field: 'location',
-          strictMode: true,
+          strictMode: false, // Changed to false to include more results
         )
         .map((List<DocumentSnapshot<Object?>> documentList) {
       return documentList.map((doc) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/auth_service.dart'; // Import AuthService
 import '../../models/user.dart'; // Import UserModel
 import '../widgets/custom_button.dart'; // Import CustomButton
@@ -30,7 +31,7 @@ class _GoogleRegisterInterfaceState extends State<GoogleRegisterInterface> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Complete Registration')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.completeRegistrationTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -39,7 +40,7 @@ class _GoogleRegisterInterfaceState extends State<GoogleRegisterInterface> {
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
-                labelText: 'Esmek',
+                labelText: AppLocalizations.of(context)!.yourName,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -49,7 +50,7 @@ class _GoogleRegisterInterfaceState extends State<GoogleRegisterInterface> {
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: AppLocalizations.of(context)!.email,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -61,7 +62,7 @@ class _GoogleRegisterInterfaceState extends State<GoogleRegisterInterface> {
             TextFormField(
               controller: _phoneController,
               decoration: InputDecoration(
-                labelText: 'Phone Number',
+                labelText: AppLocalizations.of(context)!.phoneNumber,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
@@ -71,7 +72,7 @@ class _GoogleRegisterInterfaceState extends State<GoogleRegisterInterface> {
             const SizedBox(height: 20),
             Row(
               children: [
-                const Text('3andek service'),
+                Text(AppLocalizations.of(context)!.doYouHaveService),
                 Switch(
                   value: _isServiceProvider,
                   onChanged: (value) {
@@ -100,20 +101,20 @@ class _GoogleRegisterInterfaceState extends State<GoogleRegisterInterface> {
                     } else {
                       Navigator.pushReplacementNamed(context, '/searcherHome');
                     }
-                  } else {
-                    // Show error message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Registration failed. Please try again.'),
-                      ),
-                    );
+                   } else {
+                     // Show error message
+                     ScaffoldMessenger.of(context).showSnackBar(
+                       SnackBar( // Removed const
+                         content: Text(AppLocalizations.of(context)!.registrationFailedTryAgain),
+                       ),
+                     );
                   }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in all fields.'),
-                    ),
-                  );
+                 } else {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                     SnackBar( // Removed const
+                       content: Text(AppLocalizations.of(context)!.fillAllFieldsPlease),
+                     ),
+                   );
                 }
               },
               text: 'Complete Registration',
@@ -121,7 +122,7 @@ class _GoogleRegisterInterfaceState extends State<GoogleRegisterInterface> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text("3andi compte?"),
+                Text(AppLocalizations.of(context)!.doIHaveAccount),
                 TextButton(
                   child: const Text(
                     'Odkhol',

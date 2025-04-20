@@ -3,8 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart'; // Import app_links
 import 'package:flutter/services.dart'; // Import services for PlatformException
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:sahel_alik/firebase_options.dart';
 import 'package:sahel_alik/models/user.dart'; // Import UserModel
+import 'package:sahel_alik/providers/locale_provider.dart';
 import 'package:sahel_alik/services/auth_service.dart';
 import 'package:sahel_alik/views/interfaces/login_interface.dart';
 import 'package:sahel_alik/views/interfaces/register_interface.dart';
@@ -16,13 +19,24 @@ import 'package:sahel_alik/views/interfaces/searcher/booking_screen.dart'; // Im
 import 'package:sahel_alik/models/service.dart'; // Import ServiceModel
 import 'views/interfaces/provider/provider_home_interface.dart';
 import 'views/interfaces/searcher/service_details_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+
+  // Initialize locale provider
+  final localeProvider = LocaleProvider();
+  await localeProvider.initLocale();
+
+  runApp(
+    ChangeNotifierProvider.value(
+      value: localeProvider,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -80,9 +94,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
     return MaterialApp(
       navigatorKey: navigatorKey, // Assign the navigator key
       title: 'Sahel Alik',
+      locale: localeProvider.locale,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('ar'), // Arabic
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,

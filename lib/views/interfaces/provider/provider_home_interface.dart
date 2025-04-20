@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sahel_alik/views/widgets/custom_button.dart';
 import '../profile_interface.dart';
 import 'add_service_interface.dart';
 import 'orders_interface.dart';
 import 'service_list_interface.dart';
+import '../../widgets/language_switcher.dart';
 
 class ProviderHomeInterface extends StatefulWidget {
   const ProviderHomeInterface({super.key});
@@ -30,7 +32,12 @@ class _ProviderHomeInterfaceState extends State<ProviderHomeInterface> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Provider Home')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.providerHome),
+        actions: const [
+          LanguageSwitcher(),
+        ],
+      ),
       body: Stack(
         children: [
           Center(
@@ -49,35 +56,38 @@ class _ProviderHomeInterfaceState extends State<ProviderHomeInterface> {
                         builder: (context) => const AddServiceInterface()),
                   );
                 },
-                text:
-                    'Add Service', // You can change the text if needed, or use an icon
+                text: AppLocalizations.of(context)!.addService,
               ),
             ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services),
-            label: 'Services',
+            icon: const Icon(Icons.miscellaneous_services),
+            label: AppLocalizations.of(context)!.services,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Orders',
+            icon: const Icon(Icons.shopping_cart),
+            label: AppLocalizations.of(context)!.orders,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: const Icon(Icons.person),
+            label: AppLocalizations.of(context)!.profile,
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white70
+            : Colors.grey[700],
         onTap: _onItemTapped,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Theme.of(context).colorScheme.surface
+            : Colors.white,
         elevation: 4,
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        unselectedLabelStyle: const TextStyle(color: Colors.grey),
         showUnselectedLabels: true,
       ),
     );

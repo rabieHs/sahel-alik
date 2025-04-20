@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import '../../models/user.dart';
 
@@ -41,11 +42,13 @@ class _ProfileInterfaceState extends State<ProfileInterface> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profil')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.profile)),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _user == null
-              ? const Center(child: Text('Failed to load user information.'))
+              ? Center(
+                  child:
+                      Text(AppLocalizations.of(context)!.userProfileNotFound))
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -59,19 +62,21 @@ class _ProfileInterfaceState extends State<ProfileInterface> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      _buildInfoRow('Name', _user?.name ?? 'N/A'),
-                      _buildInfoRow('Email', _user?.email ?? 'N/A'),
-                      _buildInfoRow('Phone', _user?.phone ?? 'N/A'),
+                      _buildInfoRow(AppLocalizations.of(context)!.name,
+                          _user?.name ?? 'N/A'),
+                      _buildInfoRow(AppLocalizations.of(context)!.email,
+                          _user?.email ?? 'N/A'),
+                      _buildInfoRow(AppLocalizations.of(context)!.phoneNumber,
+                          _user?.phone ?? 'N/A'),
                       _buildInfoRow('Type', _user?.type ?? 'N/A'),
-                      _buildInfoRow('BALNCE', "${_user?.balance} TND"),
+                      _buildInfoRow('Balance', "${_user?.balance} دينار"),
                       const SizedBox(height: 30),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () async {
-                            await AuthService().signOut();
-                            Navigator.pushReplacementNamed(context, '/login');
+                          onPressed: () {
+                            _signOut();
                           },
-                          child: const Text('Sign Out'),
+                          child: Text(AppLocalizations.of(context)!.signOut),
                         ),
                       ),
                     ],
@@ -90,5 +95,11 @@ class _ProfileInterfaceState extends State<ProfileInterface> {
         ],
       ),
     );
+  }
+
+  Future<void> _signOut() async {
+    await AuthService().signOut();
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, '/login');
   }
 }

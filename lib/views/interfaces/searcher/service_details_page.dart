@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../widgets/custom_button.dart';
 import '../../../models/service.dart';
 import '../../../models/user.dart';
 import '../login_interface.dart';
-import 'booking_screen.dart'; // Import BookingScreen
+import 'booking_screen.dart';
 import '../../../services/auth_service.dart';
 
 class ServiceDetailsPage extends StatefulWidget {
   final ServiceModel service;
 
-  const ServiceDetailsPage({Key? key, required this.service}) : super(key: key);
+  const ServiceDetailsPage({super.key, required this.service});
 
   @override
-  _ServiceDetailsPageState createState() => _ServiceDetailsPageState();
+  State<ServiceDetailsPage> createState() => _ServiceDetailsPageState();
 }
 
 class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
@@ -56,7 +57,7 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
       setState(() {
         _isLoading = false;
       });
-      print('Error fetching provider details: $e');
+      // Error fetching provider details
     }
   }
 
@@ -79,7 +80,7 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                service.title ?? 'Service Details',
+                service.title ?? AppLocalizations.of(context)!.serviceDetails,
                 style:
                     theme.textTheme.titleMedium?.copyWith(color: Colors.white),
               ),
@@ -110,25 +111,31 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 // Service Details Section
-                _buildSectionTitle('Service Information', Icons.info_outline),
+                _buildSectionTitle(
+                    AppLocalizations.of(context)!.serviceInformationTitle,
+                    Icons.info_outline),
                 _buildInfoCard(
                   context,
                   children: [
-                    _buildDetailRow('Category', service.category ?? 'N/A'),
+                    _buildDetailRow(AppLocalizations.of(context)!.category,
+                        service.category ?? 'N/A'),
+                    _buildDetailRow(AppLocalizations.of(context)!.description,
+                        service.description ?? 'N/A'),
+                    _buildDetailRow(AppLocalizations.of(context)!.location,
+                        _formatLocation(service.location)),
                     _buildDetailRow(
-                        'Description', service.description ?? 'N/A'),
-                    _buildDetailRow(
-                        'Location', _formatLocation(service.location)),
-                    _buildDetailRow(
-                        'Price',
+                        AppLocalizations.of(context)!.price,
                         service.price != null
-                            ? '\$${service.price!.toStringAsFixed(2)}'
+                            ? AppLocalizations.of(context)!
+                                .pricePerHour(service.price!)
                             : 'N/A'),
                   ],
                 ),
 
                 // Provider Information Section
-                _buildSectionTitle('Provider Details', Icons.person_outline),
+                _buildSectionTitle(
+                    AppLocalizations.of(context)!.providerInformation,
+                    Icons.person_outline),
                 _isLoading
                     ? Center(
                         child: CircularProgressIndicator(
@@ -140,27 +147,9 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                 // Booking Section
                 const SizedBox(height: 20),
                 CustomButton(
-                  text: 'Book Now',
-                  onPressed: () async {
-                    final authService = AuthService();
-                    final user = await authService.getCurrentUser();
-                    if (user != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookingScreen(
-                            serviceId: widget.service.id!,
-                            providerId: widget.service.userId!,
-                          ),
-                        ),
-                      );
-                    } else {
-                      Navigator.pushNamed(
-                        context,
-                        LoginInterface
-                            .routeName, // Navigate to login screen if not logged in
-                      );
-                    }
+                  text: AppLocalizations.of(context)!.bookService,
+                  onPressed: () {
+                    _handleBookService();
                   },
                 ),
               ]),
@@ -250,18 +239,45 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              _buildDetailRow('Name', providerDetails.name ?? 'N/A'),
-              _buildDetailRow('Email', providerDetails.email ?? 'N/A'),
-              _buildDetailRow('Phone', providerDetails.phone ?? 'N/A'),
+              _buildDetailRow(AppLocalizations.of(context)!.name,
+                  providerDetails.name ?? 'N/A'),
+              _buildDetailRow(AppLocalizations.of(context)!.email,
+                  providerDetails.email ?? 'N/A'),
+              _buildDetailRow(AppLocalizations.of(context)!.phoneNumber,
+                  providerDetails.phone ?? 'N/A'),
             ],
           )
         : Center(
             child: Text(
-              'Provider details not available',
+              AppLocalizations.of(context)!.serviceDetailsNotFound,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.grey,
                   ),
             ),
           );
+  }
+
+  Future<void> _handleBookService() async {
+    final authService = AuthService();
+    final user = await authService.getCurrentUser();
+
+    if (!mounted) return;
+
+    if (user != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BookingScreen(
+            serviceId: widget.service.id!,
+            providerId: widget.service.userId!,
+          ),
+        ),
+      );
+    } else {
+      Navigator.pushNamed(
+        context,
+        LoginInterface.routeName,
+      );
+    }
   }
 }

@@ -1,124 +1,174 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../services/auth_service.dart';
 import '../../models/user.dart';
+import '../../utils/validation_utils.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/language_switcher.dart';
 import 'google_register_interface.dart'; // Import GoogleRegisterInterface
 
 class LoginInterface extends StatefulWidget {
   static const routeName = '/login'; // Define routeName
   final VoidCallback showRegisterPage;
-  const LoginInterface({Key? key, required this.showRegisterPage})
-      : super(key: key);
+  const LoginInterface({super.key, required this.showRegisterPage});
 
   @override
-  _LoginInterfaceState createState() => _LoginInterfaceState();
+  State<LoginInterface> createState() => _LoginInterfaceState();
 }
 
 class _LoginInterfaceState extends State<LoginInterface> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Odkhol (Login)')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.login),
+        actions: const [
+          LanguageSwitcher(),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Gmail',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Mot de passe',
-                hintText: 'Mot de passe',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 30),
-            CustomButton(
-              onPressed: () async {
-                // Email/password login
-                String email = _emailController.text.trim();
-                String password = _passwordController.text.trim();
-                if (email.isNotEmpty && password.isNotEmpty) {
-                  AuthService authService = AuthService();
-                  UserModel? user = await authService
-                      .signInWithEmailAndPassword(email, password);
-                  if (user != null) {
-                    _navigateToHome(context, user);
-                  } else {
-                    _showSnackBar(
-                        context, 'Login meklech. Thabet fi m3aloumet.');
-                  }
-                } else {
-                  _showSnackBar(context, 'Adkhel email w mot de passe.');
-                }
-              },
-              text: 'Odkhol (Login)',
-            ),
-            const SizedBox(height: 20),
-            CustomButton(
-              onPressed: () async {
-                // Google Sign-in
-                AuthService authService = AuthService();
-                UserModel? user = await authService.signInWithGoogle();
-                if (user != null) {
-                  _navigateToHomeOrCompleteRegistration(context, user);
-                } else {
-                  _showSnackBar(
-                      context, 'Odkhol b Google meklech. Aawed jarr.');
-                }
-              },
-              text: 'Odkhol b Google (Login)',
-            ),
-            const SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/searcherHome');
-              },
-              child: const Text(
-                'Nfout dima (Skip)',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text("Ma andekech compte ? (No account?)"),
-                TextButton(
-                  onPressed: () {
-                    widget.showRegisterPage();
-                  },
-                  child: const Text(
-                    'A3mel Compte (Register)',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.email,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
                   ),
                 ),
-              ],
-            ),
-          ],
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) =>
+                    ValidationUtils.validateEmail(value, context),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.password,
+                  hintText: AppLocalizations.of(context)!.password,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                ),
+                obscureText: true,
+                validator: (value) =>
+                    ValidationUtils.validatePassword(value, context),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              const SizedBox(height: 30),
+              CustomButton(
+                onPressed: _isLoading
+                    ? () {}
+                    : () {
+                        _handleLogin();
+                      },
+                text: AppLocalizations.of(context)!.login,
+                loading: _isLoading,
+              ),
+              const SizedBox(height: 20),
+              CustomButton(
+                onPressed: _isLoading
+                    ? () {}
+                    : () {
+                        _handleGoogleLogin();
+                      },
+                text: AppLocalizations.of(context)!.loginWithGoogle,
+                loading: _isLoading,
+              ),
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/searcherHome');
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.skip,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.noAccount),
+                  TextButton(
+                    onPressed: () {
+                      widget.showRegisterPage();
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.register,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _navigateToHomeOrCompleteRegistration(
-      BuildContext context, UserModel user) {
+  Future<void> _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      // Email/password login
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+
+      AuthService authService = AuthService();
+      UserModel? user =
+          await authService.signInWithEmailAndPassword(email, password);
+
+      if (!mounted) return;
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (user != null) {
+        _navigateToHome(user);
+      } else {
+        _showSnackBar(AppLocalizations.of(context)!.loginFailed);
+      }
+    }
+  }
+
+  Future<void> _handleGoogleLogin() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Google Sign-in
+    AuthService authService = AuthService();
+    UserModel? user = await authService.signInWithGoogle();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (user != null) {
+      _navigateToHomeOrCompleteRegistration(user);
+    } else {
+      _showSnackBar(AppLocalizations.of(context)!.googleLoginFailed);
+    }
+  }
+
+  void _navigateToHomeOrCompleteRegistration(UserModel user) {
     if (user.type == 'provider') {
       Navigator.pushReplacementNamed(context, '/providerHome');
     } else if (user.type == 'searcher') {
@@ -136,7 +186,7 @@ class _LoginInterfaceState extends State<LoginInterface> {
     }
   }
 
-  void _navigateToHome(BuildContext context, UserModel user) {
+  void _navigateToHome(UserModel user) {
     if (user.type == 'provider') {
       Navigator.pushReplacementNamed(context, '/providerHome');
     } else {
@@ -144,7 +194,8 @@ class _LoginInterfaceState extends State<LoginInterface> {
     }
   }
 
-  void _showSnackBar(BuildContext context, String message) {
+  void _showSnackBar(String message) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),

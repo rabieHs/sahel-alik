@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sahel_alik/views/interfaces/searcher/chatbot_screen.dart';
 import 'package:sahel_alik/views/interfaces/searcher/searcher_orders_tab.dart';
 import 'package:sahel_alik/views/interfaces/searcher/searcher_services_tab.dart';
 
 import '../../widgets/service_card.dart';
+import '../../widgets/language_switcher.dart';
 import '../../../services/service_service.dart';
 import '../../../models/service.dart';
 import '../profile_interface.dart';
@@ -25,21 +27,75 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
   bool _isLoading = true;
   double _radius = 5.0; // Default radius
 
-  List<Map<String, dynamic>> categories = [
-    {'name': 'Maid', 'icon': Icons.home_work},
-    {'name': 'Cleaner', 'icon': Icons.cleaning_services},
-    {'name': 'Mechanic', 'icon': Icons.build},
-    {'name': 'Barber', 'icon': Icons.content_cut},
-    {'name': 'Plumber', 'icon': Icons.plumbing},
-    {'name': 'Electrician', 'icon': Icons.electrical_services},
-    {'name': 'Carpenter', 'icon': Icons.carpenter},
-    {'name': 'Painter', 'icon': Icons.format_paint},
-    {'name': 'Gardener', 'icon': Icons.nature},
-    {'name': 'Chef', 'icon': Icons.restaurant},
-    {'name': 'Tutor', 'icon': Icons.school},
-    {'name': 'Driver', 'icon': Icons.drive_eta},
-    {'name': 'More', 'icon': Icons.category},
-  ];
+  List<Map<String, dynamic>> _getLocalizedCategories(BuildContext context) {
+    return [
+      {
+        'name': AppLocalizations.of(context)!.categoryMaid,
+        'icon': Icons.home_work,
+        'value': 'Maid'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryCleaner,
+        'icon': Icons.cleaning_services,
+        'value': 'Cleaner'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryMechanic,
+        'icon': Icons.build,
+        'value': 'Mechanic'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryBarber,
+        'icon': Icons.content_cut,
+        'value': 'Barber'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryPlumber,
+        'icon': Icons.plumbing,
+        'value': 'Plumber'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryElectrician,
+        'icon': Icons.electrical_services,
+        'value': 'Electrician'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryCarpenter,
+        'icon': Icons.carpenter,
+        'value': 'Carpenter'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryPainter,
+        'icon': Icons.format_paint,
+        'value': 'Painter'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryGardener,
+        'icon': Icons.nature,
+        'value': 'Gardener'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryChef,
+        'icon': Icons.restaurant,
+        'value': 'Chef'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryTutor,
+        'icon': Icons.school,
+        'value': 'Tutor'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryDriver,
+        'icon': Icons.drive_eta,
+        'value': 'Driver'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryMore,
+        'icon': Icons.category,
+        'value': 'More'
+      },
+    ];
+  }
 
   @override
   void initState() {
@@ -52,7 +108,8 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
       _isLoading = true;
     });
     final serviceService = ServiceService();
-    final position = await LocationUtils.getCurrentPosition();
+    final position =
+        await LocationUtils.getCurrentPosition(context); // Pass context
     double searchRadius = radius ?? _radius; // Use provided radius or default
 
     if (position != null) {
@@ -76,8 +133,9 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
           _filteredServices = services;
           _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Location not available, showing all services.')),
+            SnackBar(
+                content:
+                    Text(AppLocalizations.of(context)!.locationNotAvailable)),
           );
         });
       });
@@ -113,13 +171,13 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Filter by Radius'),
+          title: Text(AppLocalizations.of(context)!.filterByRadius),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter dialogSetState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text('Select radius (km):'),
+                  Text(AppLocalizations.of(context)!.selectRadius),
                   Slider(
                     value: tempRadius,
                     min: 1.0,
@@ -139,13 +197,13 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Apply'),
+              child: Text(AppLocalizations.of(context)!.apply),
               onPressed: () {
                 setState(() {
                   _radius = tempRadius;
@@ -171,8 +229,9 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Searcher Home'),
+        title: Text(AppLocalizations.of(context)!.searcherHome),
         actions: [
+          const LanguageSwitcher(),
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
@@ -183,33 +242,43 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
       ),
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.miscellaneous_services),
-            label: 'Services',
+            icon: const Icon(Icons.miscellaneous_services),
+            label: AppLocalizations.of(context)!.services,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Orders',
+            icon: const Icon(Icons.shopping_cart),
+            label: AppLocalizations.of(context)!.orders,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: const Icon(Icons.person),
+            label: AppLocalizations.of(context)!.profile,
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white70
+            : Colors.grey[700],
         onTap: _onItemTapped,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Theme.of(context).colorScheme.surface
+            : Colors.white,
+        elevation: 4,
+        type: BottomNavigationBarType.fixed,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        showUnselectedLabels: true,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ChatbotScreen()),
-          );
-        },
-        child: const Icon(Icons.chat),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+      //     );
+      //   },
+      //   child: const Icon(Icons.chat),
+      // ),
     );
   }
 }

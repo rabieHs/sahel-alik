@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../services/auth_service.dart'; // Import AuthService
 import '../../widgets/service_card.dart';
 import '../../../services/service_service.dart';
@@ -86,11 +87,16 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Request ID: ${request.bookingRequestId}'),
-                Text('Service ID: ${request.serviceId}'),
-                Text('Date/Time: ${request.dateTime}'),
-                Text('Description: ${request.description}'),
-                Text('Status: ${request.status}'),
+                Text(
+                    '${AppLocalizations.of(context)!.requestId}: ${request.bookingRequestId}'),
+                Text(
+                    '${AppLocalizations.of(context)!.serviceId}: ${request.serviceId}'),
+                Text(
+                    '${AppLocalizations.of(context)!.dateAndTime}: ${request.dateTime}'),
+                Text(
+                    '${AppLocalizations.of(context)!.description}: ${request.description}'),
+                Text(
+                    '${AppLocalizations.of(context)!.status}: ${request.status}'),
                 const SizedBox(height: 10),
                 if (request.status == 'pending')
                   Row(
@@ -100,13 +106,13 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
                         onPressed: () {
                           _showPriceDialog(context, request);
                         },
-                        child: const Text('Set Price'),
+                        child: Text(AppLocalizations.of(context)!.setPrice),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           _rejectRequest(context, request);
                         },
-                        child: const Text('Reject'),
+                        child: Text(AppLocalizations.of(context)!.reject),
                       ),
                     ],
                   ),
@@ -130,18 +136,24 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Request ID: ${request.bookingRequestId}'),
-                Text('Service ID: ${request.serviceId}'),
-                Text('Date/Time: ${request.dateTime}'),
-                Text('Description: ${request.description}'),
-                Text('User Rating: ${request.userRating ?? 'Not rated yet'}'),
-                Text('Status: ${request.status}'),
+                Text(
+                    '${AppLocalizations.of(context)!.requestId}: ${request.bookingRequestId}'),
+                Text(
+                    '${AppLocalizations.of(context)!.serviceId}: ${request.serviceId}'),
+                Text(
+                    '${AppLocalizations.of(context)!.dateAndTime}: ${request.dateTime}'),
+                Text(
+                    '${AppLocalizations.of(context)!.description}: ${request.description}'),
+                Text(
+                    '${AppLocalizations.of(context)!.userRating}: ${request.userRating ?? AppLocalizations.of(context)!.notRatedYet}'),
+                Text(
+                    '${AppLocalizations.of(context)!.status}: ${request.status}'),
                 const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
                     _confirmPayment(context, request);
                   },
-                  child: const Text('Confirm Payment'),
+                  child: Text(AppLocalizations.of(context)!.confirmPayment),
                 ),
               ],
             ),
@@ -157,7 +169,7 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
         request.bookingRequestId!, 'rejected');
     _loadBookingRequests();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Request Rejected')),
+      SnackBar(content: Text(AppLocalizations.of(context)!.requestRejected)),
     );
   }
 
@@ -170,7 +182,9 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
     );
     _loadBookingRequests();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Payment Confirmed and Order Finished')),
+      SnackBar(
+          content: Text(
+              AppLocalizations.of(context)!.paymentConfirmedOrderFinished)),
     );
   }
 
@@ -181,21 +195,22 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Set Price for Service'),
+          title: Text(AppLocalizations.of(context)!.setPriceForService),
           content: TextField(
             controller: priceController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(hintText: 'Enter your price'),
+            decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.enterYourPrice),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Set Price'),
+              child: Text(AppLocalizations.of(context)!.setPrice),
               onPressed: () {
                 double? price = double.tryParse(priceController.text);
                 if (price != null) {
@@ -203,7 +218,9 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
                   Navigator.of(context).pop();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Invalid price')),
+                    SnackBar(
+                        content:
+                            Text(AppLocalizations.of(context)!.invalidPrice)),
                   );
                 }
               },
@@ -224,23 +241,23 @@ class ProviderOrdersInterfaceState extends State<ProviderOrdersInterface>
     debugPrint('Price sent for request ${request.bookingRequestId}: $price');
     _loadBookingRequests();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Price requested')),
+      SnackBar(content: Text(AppLocalizations.of(context)!.priceRequested)),
     );
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orders'),
+        title: Text(AppLocalizations.of(context)!.orders),
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          tabs: const [
-            Tab(text: 'Pending Requests'), // Changed to Requests
-            Tab(text: 'Active Requests'), // Changed to Requests
-            Tab(text: 'Completed Requests'), // Changed to Requests
-            Tab(text: 'Finished Requests'), // Changed to Requests
-            Tab(text: 'Payment Requests'),
+          tabs: [
+            Tab(text: AppLocalizations.of(context)!.pendingRequests),
+            Tab(text: AppLocalizations.of(context)!.activeRequests),
+            Tab(text: AppLocalizations.of(context)!.completedRequests),
+            Tab(text: AppLocalizations.of(context)!.finishedRequests),
+            Tab(text: AppLocalizations.of(context)!.paymentRequests),
           ],
         ),
       ),

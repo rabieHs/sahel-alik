@@ -1,7 +1,9 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LocationUtils {
-  static Future<Position?> getCurrentPosition() async {
+  static Future<Position?> getCurrentPosition(BuildContext? context) async {
     bool serviceEnabled;
     LocationPermission permission;
 

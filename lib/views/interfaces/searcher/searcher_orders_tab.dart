@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http; // Import http; // Import http
 import 'dart:convert'; // Import convert
@@ -42,12 +43,12 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
       appBar: TabBar(
         controller: _tabController,
         isScrollable: true, // Added isScrollable
-        tabs: const [
-          Tab(text: 'Pending'),
-          Tab(text: 'Price Confirmation'), // Added Price Confirmation tab
-          Tab(text: 'Active'),
-          Tab(text: 'Completed'),
-          Tab(text: 'Finished'),
+        tabs: [
+          Tab(text: AppLocalizations.of(context)!.pending),
+          Tab(text: AppLocalizations.of(context)!.priceConfirmation),
+          Tab(text: AppLocalizations.of(context)!.active),
+          Tab(text: AppLocalizations.of(context)!.completed),
+          Tab(text: AppLocalizations.of(context)!.finished),
         ],
       ),
       body: TabBarView(
@@ -68,14 +69,15 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
       future: _fetchBookingRequests(status),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
         final orders = snapshot.data ?? [];
         if (orders.isEmpty) {
-          return const Center(child: Text('No orders found.'));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.noOrdersFound));
         }
         return ListView.builder(
           itemCount: orders.length,
@@ -88,16 +90,21 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Request ID: ${request.bookingRequestId}'),
-                    Text('Service ID: ${request.serviceId}'),
-                    Text('Date/Time: ${request.dateTime}'),
-                    Text('Description: ${request.description}'),
+                    Text(
+                        '${AppLocalizations.of(context)!.requestId}: ${request.bookingRequestId}'),
+                    Text(
+                        '${AppLocalizations.of(context)!.serviceId}: ${request.serviceId}'),
+                    Text(
+                        '${AppLocalizations.of(context)!.dateAndTime}: ${request.dateTime}'),
+                    Text(
+                        '${AppLocalizations.of(context)!.description}: ${request.description}'),
                     if (request.status == 'price_request')
                       Text(
-                          'Provider Price: ${request.price}'), // Display provider price
+                          '${AppLocalizations.of(context)!.providerPrice}: ${request.price}'),
                     Text(
-                        'User Rating: ${request.paymentMethod == 'cash' && request.status == 'finished' ? 'You rated this service ${request.userRating ?? _rating} stars' : 'Not rated yet'}'),
-                    Text('Status: ${request.status}'),
+                        '${AppLocalizations.of(context)!.userRating}: ${request.paymentMethod == 'cash' && request.status == 'finished' ? AppLocalizations.of(context)!.youRated('${request.userRating ?? _rating}') : AppLocalizations.of(context)!.notRatedYet}'),
+                    Text(
+                        '${AppLocalizations.of(context)!.status}: ${request.status}'),
                     const SizedBox(height: 10),
                     if (request.status == 'price_request')
                       Row(
@@ -107,26 +114,28 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
                             onPressed: () {
                               _confirmPrice(context, request);
                             },
-                            child: const Text('Confirm Price'),
+                            child: Text(
+                                AppLocalizations.of(context)!.confirmPrice),
                           ),
                           ElevatedButton(
                             onPressed: () {
                               _rejectPrice(context, request);
                             },
-                            child: const Text('Reject Price'),
+                            child:
+                                Text(AppLocalizations.of(context)!.rejectPrice),
                           ),
                         ],
                       ),
                     if (request.status == 'completed')
                       CustomButton(
-                        text: 'Pay',
+                        text: AppLocalizations.of(context)!.pay,
                         onPressed: () {
                           _showPaymentDialog(context, request);
                         },
                       ),
                     if (request.status == 'active')
                       CustomButton(
-                        text: 'Complete Order',
+                        text: AppLocalizations.of(context)!.completeOrder,
                         onPressed: () {
                           _completeOrder(context, request);
                         },
@@ -169,19 +178,19 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Payment Options'),
+          title: Text(AppLocalizations.of(context)!.paymentOptions),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                title: const Text('Pay with Cash'),
+                title: Text(AppLocalizations.of(context)!.payWithCash),
                 onTap: () {
                   Navigator.pop(context);
                   _payWithCash(context, request);
                 },
               ),
               ListTile(
-                title: const Text('Pay Online'),
+                title: Text(AppLocalizations.of(context)!.payOnline),
                 onTap: () {
                   _payOnline(context, request);
                 },
@@ -198,11 +207,11 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Pay with Cash'),
+          title: Text(AppLocalizations.of(context)!.payWithCash),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Text('Please rate the service you received:'),
+              Text(AppLocalizations.of(context)!.rateServiceReceived),
               const SizedBox(height: 20),
               RatingBar.builder(
                 // Use flutter_rating_bar
@@ -222,7 +231,7 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
               ),
               const SizedBox(height: 20),
               CustomButton(
-                text: 'Confirm Payment',
+                text: AppLocalizations.of(context)!.confirmPayment,
                 onPressed: () {
                   Navigator.pop(context);
                   _paymentRequested(context, request, _rating);
@@ -250,15 +259,17 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
           'Booking request ${request.bookingRequestId} status updated to payment_request');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
             content:
-                Text('Payment requested. Status updated to payment_request.')),
+                Text(AppLocalizations.of(context)!.paymentRequestedStatus)),
       );
       setState(() {});
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error requesting payment: $error')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!
+                .errorRequestingPayment(error.toString()))),
       );
     }
   }
@@ -274,7 +285,7 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
     if (user == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User not logged in.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.userNotLoggedIn)),
       );
       return;
     }
@@ -288,7 +299,8 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
     if (!userDoc.exists || userDoc.data() == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User profile not found.')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!.userProfileNotFound)),
       );
       return;
     }
@@ -303,7 +315,9 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
         .get();
     if (!serviceDoc.exists || serviceDoc.data() == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Service details not found.')),
+        SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.serviceDetailsNotFound)),
       );
       return;
     }
@@ -407,7 +421,9 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
         return;
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error initiating online payment: $error')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!
+                .errorInitiatingOnlinePayment(error.toString()))),
       );
     }
   }
@@ -421,13 +437,17 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
           .update({'status': 'completed'});
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Order status updated to completed.')),
+        SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.orderStatusUpdatedCompleted)),
       );
       setState(() {}); // Refresh the UI
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error updating order status: $error')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!
+                .errorUpdatingOrderStatus(error.toString()))),
       );
     }
   }
@@ -448,13 +468,17 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
       });
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Order completed and rated.')),
+        SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.orderCompletedAndRated)),
       );
       setState(() {}); // Refresh the UI
     } catch (error) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error completing order and rating: $error')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!
+                .errorCompletingOrderAndRating(error.toString()))),
       );
     }
   }
@@ -467,7 +491,7 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
         .update({'status': 'active'});
     setState(() {});
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Price Confirmed')),
+      SnackBar(content: Text(AppLocalizations.of(context)!.priceConfirmed)),
     );
   }
 
@@ -479,7 +503,7 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
         .update({'status': 'pending'});
     setState(() {});
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Price Rejected')),
+      SnackBar(content: Text(AppLocalizations.of(context)!.priceRejected)),
     );
   }
 }

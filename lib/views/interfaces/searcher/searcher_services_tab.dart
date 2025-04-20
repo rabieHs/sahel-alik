@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widgets/service_card.dart';
 import '../../../services/service_service.dart';
@@ -20,26 +21,83 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
   double _radius = 5.0; // Default radius
   final TextEditingController _searchController = TextEditingController();
 
-  List<Map<String, dynamic>> categories = [
-    {'name': 'Maid', 'icon': Icons.home_work},
-    {'name': 'Cleaner', 'icon': Icons.cleaning_services},
-    {'name': 'Mechanic', 'icon': Icons.build},
-    {'name': 'Barber', 'icon': Icons.content_cut},
-    {'name': 'Plumber', 'icon': Icons.plumbing},
-    {'name': 'Electrician', 'icon': Icons.electrical_services},
-    {'name': 'Carpenter', 'icon': Icons.carpenter},
-    {'name': 'Painter', 'icon': Icons.format_paint},
-    {'name': 'Gardener', 'icon': Icons.nature},
-    {'name': 'Chef', 'icon': Icons.restaurant},
-    {'name': 'Tutor', 'icon': Icons.school},
-    {'name': 'Driver', 'icon': Icons.drive_eta},
-    {'name': 'More', 'icon': Icons.category},
-  ];
+  List<Map<String, dynamic>> _getLocalizedCategories(BuildContext context) {
+    return [
+      {
+        'name': AppLocalizations.of(context)!.categoryMaid,
+        'icon': Icons.home_work,
+        'value': 'Maid'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryCleaner,
+        'icon': Icons.cleaning_services,
+        'value': 'Cleaner'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryMechanic,
+        'icon': Icons.build,
+        'value': 'Mechanic'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryBarber,
+        'icon': Icons.content_cut,
+        'value': 'Barber'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryPlumber,
+        'icon': Icons.plumbing,
+        'value': 'Plumber'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryElectrician,
+        'icon': Icons.electrical_services,
+        'value': 'Electrician'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryCarpenter,
+        'icon': Icons.carpenter,
+        'value': 'Carpenter'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryPainter,
+        'icon': Icons.format_paint,
+        'value': 'Painter'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryGardener,
+        'icon': Icons.nature,
+        'value': 'Gardener'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryChef,
+        'icon': Icons.restaurant,
+        'value': 'Chef'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryTutor,
+        'icon': Icons.school,
+        'value': 'Tutor'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryDriver,
+        'icon': Icons.drive_eta,
+        'value': 'Driver'
+      },
+      {
+        'name': AppLocalizations.of(context)!.categoryMore,
+        'icon': Icons.category,
+        'value': 'More'
+      },
+    ];
+  }
 
   @override
   void initState() {
     super.initState();
-    _fetchServices();
+    // Add a small delay to ensure the widget is fully mounted before fetching
+    Future.delayed(Duration.zero, () {
+      _fetchServices();
+    });
   }
 
   Future<void> _fetchServices({double? radius}) async {
@@ -47,36 +105,74 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
       _isLoading = true;
     });
     final serviceService = ServiceService();
-    final position = await LocationUtils.getCurrentPosition();
+    final position =
+        await LocationUtils.getCurrentPosition(context); // Pass context
     double searchRadius = radius ?? _radius; // Use provided radius or default
 
     if (position != null) {
-      final servicesStream = serviceService.getNearestServices(
-        latitude: position.latitude,
-        longitude: position.longitude,
-        radius: searchRadius,
-      );
-      servicesStream.first.then((services) {
-        setState(() {
-          _services = services;
-          _filteredServices = services;
-          _isLoading = false;
-        });
-      });
+      try {
+        final servicesStream = serviceService.getNearestServices(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          radius: searchRadius,
+        );
+        final services = await servicesStream.first;
+        if (mounted) {
+          setState(() {
+            _services = services;
+            _filteredServices = services;
+            _isLoading = false;
+          });
+          // Debug information removed
+        }
+      } catch (e) {
+        // Error logged
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+          _showSnackBar('Error fetching nearby services: $e');
+        }
+      }
     } else {
-      final allServicesStream = serviceService.getAllServices();
-      allServicesStream.first.then((services) {
-        setState(() {
-          _services = services;
-          _filteredServices = services;
-          _isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Location not available, showing all services.')),
-          );
-        });
-      });
+      try {
+        final allServicesStream = serviceService.getAllServices();
+        final services = await allServicesStream.first;
+        if (mounted) {
+          setState(() {
+            _services = services;
+            _filteredServices = services;
+            _isLoading = false;
+          });
+          _showSnackBar('Location not available, showing all services.');
+        }
+      } catch (e) {
+        // Error logged
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+          _showSnackBar('Error fetching services: $e');
+        }
+      }
     }
+  }
+
+  // Helper method to show snack bar safely
+  void _showSnackBar(String message, {Duration? duration}) {
+    if (!mounted) return;
+
+    final context = this.context;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            duration: duration ?? const Duration(seconds: 4),
+          ),
+        );
+      }
+    });
   }
 
   void _filterServices(String query) {
@@ -102,13 +198,13 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Filter by Radius'),
+          title: Text(AppLocalizations.of(context)!.filterByRadius),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text('Select radius (km):'),
+                  Text(AppLocalizations.of(context)!.selectRadius),
                   Slider(
                     value: tempRadius,
                     min: 1.0,
@@ -128,20 +224,26 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Apply'),
+              child: Text(AppLocalizations.of(context)!.apply),
               onPressed: () {
                 setState(() {
                   _radius = tempRadius; // Update radius with temp value
                 });
-                _fetchServices(
-                    radius: _radius); // Re-fetch services with radius
+                // Re-fetch services with new radius
+                _fetchServices(radius: _radius);
                 Navigator.of(context).pop();
+
+                // Show a confirmation message
+                _showSnackBar(
+                  'Showing services within ${_radius.toStringAsFixed(1)} km',
+                  duration: const Duration(seconds: 2),
+                );
               },
             ),
           ],
@@ -150,6 +252,8 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
     );
   }
 
+  // Removed duplicate initState
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -157,51 +261,92 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
       children: [
         Column(
           children: [
+            // Filter and Refresh Row
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Filter button
+                  ElevatedButton.icon(
+                    onPressed: () => _showFilterDialog(context),
+                    icon: const Icon(Icons.filter_list),
+                    label: Text('${_radius.toStringAsFixed(1)} km'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                  // Refresh button
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () => _fetchServices(radius: _radius),
+                    tooltip: 'Refresh services',
+                  ),
+                ],
+              ),
+            ),
             // Categories Horizontal Listview
             SizedBox(
               height: 100,
               child: ListView.separated(
                 padding: const EdgeInsets.all(8.0),
                 scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
+                itemCount: _getLocalizedCategories(context).length,
                 separatorBuilder: (context, index) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
-                  final category = categories[index];
+                  final category = _getLocalizedCategories(context)[index];
                   return FilterChip(
                     avatar: Icon(category['icon'] as IconData),
                     label: Text(category['name'] as String),
-                    selected: _selectedCategory == category['name'],
+                    selected: _selectedCategory == category['value'],
                     onSelected: (bool selected) async {
                       setState(() {
                         _selectedCategory =
-                            selected ? category['name'] as String : null;
+                            selected ? category['value'] as String : null;
                         _isLoading = true;
                       });
 
                       if (selected) {
-                        final position =
-                            await LocationUtils.getCurrentPosition();
+                        final position = await LocationUtils.getCurrentPosition(
+                            context); // Pass context
                         if (position != null) {
-                          final services = await ServiceService()
-                              .getServicesByCategoryAndLocation(
-                                category: category['name'],
-                                latitude: position.latitude,
-                                longitude: position.longitude,
-                                radius: 5.0,
-                              )
-                              .first;
-                          setState(() {
-                            _filteredServices = services;
-                            _isLoading = false;
-                          });
+                          try {
+                            final services = await ServiceService()
+                                .getServicesByCategoryAndLocation(
+                                  category: category['value'],
+                                  latitude: position.latitude,
+                                  longitude: position.longitude,
+                                  radius:
+                                      _radius, // Use the current radius setting
+                                )
+                                .first;
+                            if (mounted) {
+                              setState(() {
+                                _filteredServices = services;
+                                _isLoading = false;
+                              });
+                              // Show a confirmation message
+                              final message =
+                                  'Showing ${category['name']} services within ${_radius.toStringAsFixed(1)} km';
+                              _showSnackBar(message,
+                                  duration: const Duration(seconds: 2));
+                            }
+                          } catch (e) {
+                            if (mounted) {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              _showSnackBar('Error fetching services: $e');
+                            }
+                          }
                         } else {
-                          setState(() {
-                            _isLoading = false;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Location not available.')),
-                            );
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            _showSnackBar('Location not available.');
+                          }
                         }
                       } else {
                         _fetchServices();
@@ -216,10 +361,10 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: _searchController,
-                decoration: const InputDecoration(
-                  labelText: 'Search services',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.searchServices,
+                  prefixIcon: const Icon(Icons.search),
+                  border: const OutlineInputBorder(),
                 ),
                 onChanged:
                     _filterServices, // Call _filterServices on text change

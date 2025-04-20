@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sahel_alik/views/widgets/service_card.dart';
 import 'package:sahel_alik/services/service_service.dart'; // Import ServiceService
 import 'package:sahel_alik/models/service.dart'; // Import ServiceModel
@@ -56,7 +57,7 @@ class _ServiceListInterfaceState extends State<ServiceListInterface> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Liste des Services')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.services)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -64,7 +65,7 @@ class _ServiceListInterfaceState extends State<ServiceListInterface> {
             TextFormField(
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: 'Rechercher Services',
+                labelText: '',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),

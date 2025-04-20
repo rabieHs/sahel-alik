@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sahel_alik/models/service.dart';
 import 'package:sahel_alik/views/interfaces/provider/service_details_page.dart';
 import 'package:sahel_alik/views/interfaces/searcher/service_details_page.dart'; // Import ServiceDetailsPage
@@ -56,7 +57,7 @@ class ServiceCard extends StatelessWidget {
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            Colors.black.withOpacity(0.6),
+                            Colors.black.withAlpha(153), // 0.6 opacity
                             Colors.transparent,
                           ],
                         ),
@@ -74,7 +75,7 @@ class ServiceCard extends StatelessWidget {
                           ),
                           Text(
                             service.price != null
-                                ? '\$${service.price!.toStringAsFixed(2)}'
+                                ? AppLocalizations.of(context)!.pricePerHour(service.price!)
                                 : 'Price not available',
                             style: const TextStyle(
                                 fontSize: 16, color: Colors.white),

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../widgets/custom_button.dart';
 import '../../../services/service_service.dart';
 import 'update_service_page.dart'; // Import for update service page
 import '../../../models/service.dart';
 import '../../../services/auth_service.dart'; // Import AuthService
 import '../../../models/user.dart'; // Import UserModel
-import '../../interfaces/searcher/booking_screen.dart'; // Corrected import path for BookingScreen
+// Removed unused import
 
 class ProviderServiceDetailsPage extends StatefulWidget {
   final ServiceModel service;
 
-  const ProviderServiceDetailsPage({Key? key, required this.service})
-      : super(key: key);
+  const ProviderServiceDetailsPage({super.key, required this.service});
 
   @override
-  _ServiceDetailsPageState createState() => _ServiceDetailsPageState();
+  State<ProviderServiceDetailsPage> createState() => _ServiceDetailsPageState();
 }
 
 class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
@@ -36,7 +36,7 @@ class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
       });
     } else {
       // Handle the case where userId is null, e.g., set provider to null or show an error message
-      print("Service has no provider ID.");
+      // Service has no provider ID
     }
   }
 
@@ -44,7 +44,7 @@ class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Service Details'),
+        title: Text(AppLocalizations.of(context)!.serviceDetails),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,7 +69,7 @@ class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Provider Information',
+                      Text(AppLocalizations.of(context)!.providerInformation,
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                       SizedBox(height: 8),
@@ -97,17 +97,20 @@ class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Service Details',
+                    Text(AppLocalizations.of(context)!.serviceDetails,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 16),
-                    _buildDetailRow('Title', widget.service.title ?? 'N/A'),
+                    _buildDetailRow(AppLocalizations.of(context)!.titleLabel,
+                        widget.service.title ?? 'N/A'),
+                    _buildDetailRow(AppLocalizations.of(context)!.description,
+                        widget.service.description ?? 'N/A'),
                     _buildDetailRow(
-                        'Description', widget.service.description ?? 'N/A'),
-                    _buildDetailRow(
-                        'Price', '\$${widget.service.price ?? 'N/A'}'),
+                        AppLocalizations.of(context)!.price,
+                        AppLocalizations.of(context)!
+                            .pricePerHour(widget.service.price ?? 0)),
                     if (widget.service.location != null)
-                      _buildDetailRow('Location',
+                      _buildDetailRow(AppLocalizations.of(context)!.location,
                           'Lat: ${widget.service.location!.latitude.toStringAsFixed(2)}, Lon: ${widget.service.location!.longitude.toStringAsFixed(2)}'),
                   ],
                 ),
@@ -118,7 +121,7 @@ class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 CustomButton(
-                  text: 'Update',
+                  text: AppLocalizations.of(context)!.updateButton,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -130,13 +133,14 @@ class _ServiceDetailsPageState extends State<ProviderServiceDetailsPage> {
                   },
                 ),
                 CustomButton(
-                  text: 'Delete',
+                  text: AppLocalizations.of(context)!.deleteButton,
                   onPressed: () async {
                     // Delete service logic
                     ServiceService serviceService =
                         ServiceService(); // Instantiate ServiceService
                     await serviceService.deleteService(
                         widget.service.id!); // Use widget.service
+                    if (!mounted) return;
                     Navigator.pop(context); // Go back to service list
                   },
                   backgroundColor: Colors.red, // Red color for delete button

@@ -1,0 +1,354 @@
+{
+  "@@locale": "ar",
+  "appTitle": "سهل عليك",
+
+  "login": "تسجيل الدخول",
+
+  "register": "إنشاء حساب",
+
+  "email": "البريد الإلكتروني",
+
+  "password": "كلمة المرور",
+
+  "name": "الاسم",
+
+  "phoneNumber": "رقم الهاتف",
+
+  "loginWithGoogle": "تسجيل الدخول بواسطة جوجل",
+
+  "noAccount": "ليس لديك حساب؟",
+
+  "haveAccount": "لديك حساب بالفعل؟",
+
+  "skip": "تخطي",
+
+  "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من بياناتك.",
+
+  "enterEmailPassword": "الرجاء إدخال البريد الإلكتروني وكلمة المرور.",
+
+  "googleLoginFailed": "فشل تسجيل الدخول بواسطة جوجل. يرجى المحاولة مرة أخرى.",
+
+  "fillAllFields": "يرجى ملء جميع الحقول.",
+
+   "registrationFailed": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+
+   "registrationFailedTryAgain": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+
+   "fillAllFieldsPlease": "يرجى ملء جميع الحقول.",
+
+   "areYouProvider": "هل أنت مزود خدمة؟",
+
+  "completeRegistration": "إكمال التسجيل",
+
+  "services": "الخدمات",
+
+  "orders": "الطلبات",
+
+  "profile": "الملف الشخصي",
+
+  "searcherHome": "الصفحة الرئيسية للباحث",
+
+  "providerHome": "الصفحة الرئيسية للمزود",
+
+  "serviceInformation": "معلومات الخدمة",
+
+  "providerDetails": "تفاصيل المزود",
+
+  "category": "الفئة",
+
+  "description": "الوصف",
+
+  "location": "الموقع",
+
+  "price": "السعر (بالساعة)",
+
+  "pricePerHour": "{price} دينار/ساعة",
+
+  "update": "تحديث",
+
+  "delete": "حذف",
+
+  "addService": "إضافة خدمة",
+
+  "title": "العنوان",
+
+  "selectLocation": "اختيار الموقع",
+
+  "loading": "جاري التحميل...",
+
+  "dateAndTime": "التاريخ والوقت",
+
+  "selectDateAndTime": "اختر التاريخ والوقت",
+
+  "missionDescription": "وصف المهمة",
+
+  "sendRequest": "إرسال الطلب",
+
+  "paymentSuccessful": "تم الدفع بنجاح!",
+
+  "rateService": "يرجى تقييم الخدمة التي تلقيتها:",
+
+  "submitRating": "إرسال التقييم والعودة للرئيسية",
+
+  "pending": "قيد الانتظار",
+
+  "priceConfirmation": "تأكيد السعر",
+
+  "active": "نشط",
+
+  "completed": "مكتمل",
+
+  "finished": "منتهي",
+
+  "requestId": "رقم الطلب",
+
+  "serviceId": "رقم الخدمة",
+
+  "noOrdersFound": "لم يتم العثور على طلبات.",
+
+  "statusLabel": "الحالة",
+
+  "confirmPrice": "تأكيد السعر",
+
+  "rejectPrice": "رفض السعر",
+
+  "paymentOptions": "خيارات الدفع",
+
+  "payWithCash": "الدفع نقداً",
+
+  "payOnline": "الدفع عبر الإنترنت",
+
+  "rateServiceReceived": "يرجى تقييم الخدمة التي تلقيتها:",
+
+  "errorRequestingPayment": "خطأ في طلب الدفع: {error}",
+
+  "userNotLoggedIn": "المستخدم غير مسجل الدخول.",
+
+  "userProfileNotFound": "لم يتم العثور على ملف المستخدم.",
+
+  "nameLabel": "الاسم",
+
+  "emailLabel": "البريد الإلكتروني",
+
+  "phoneLabel": "الهاتف",
+
+  "typeLabel": "النوع",
+
+  "balanceLabel": "الرصيد",
+
+  "balanceWithCurrency": "{balance} دينار",
+
+  "serviceDetailsNotFound": "لم يتم العثور على تفاصيل الخدمة.",
+
+  "errorInitiatingOnlinePayment": "خطأ في بدء الدفع عبر الإنترنت: {error}",
+
+  "orderStatusUpdatedCompleted": "تم تحديث حالة الطلب إلى مكتمل.",
+
+  "errorUpdatingOrderStatus": "خطأ في تحديث حالة الطلب: {error}",
+
+  "orderCompletedAndRated": "تم إكمال الطلب وتقييمه.",
+
+  "errorCompletingOrderAndRating": "خطأ في إكمال الطلب والتقييم: {error}",
+
+  "priceConfirmed": "تم تأكيد السعر",
+
+  "priceRejected": "تم رفض السعر",
+
+  "chatbot": "روبوت المحادثة",
+
+  "completeRegistrationTitle": "إكمال التسجيل",
+
+  "yourName": "اسمك",
+
+  "doYouHaveService": "هل لديك خدمة؟",
+
+  "doIHaveAccount": "هل لدي حساب؟",
+
+  "status": "الحالة",
+
+  "providerPrice": "سعر المزود",
+
+  "userRating": "تقييم المستخدم",
+
+  "youRated": "لقد قيمت هذه الخدمة {rating} نجوم",
+
+  "notRatedYet": "لم يتم التقييم بعد",
+
+  "confirmPrice": "تأكيد السعر",
+
+  "rejectPrice": "رفض السعر",
+
+  "pay": "دفع",
+
+  "cancel": "إلغاء",
+
+  "apply": "تطبيق",
+
+  "serviceDetails": "تفاصيل الخدمة",
+
+  "providerInformation": "معلومات المزود",
+
+  "serviceInformationTitle": "معلومات الخدمة",
+
+  "titleLabel": "العنوان",
+
+  "updateButton": "تحديث",
+
+  "deleteButton": "حذف",
+
+  "locationNotAvailable": "الموقع غير متاح، يتم عرض جميع الخدمات.",
+
+  "filterByRadius": "تصفية حسب المسافة",
+
+  "selectRadius": "اختر المسافة (كم):",
+
+  "failedToAddService": "فشل إضافة الخدمة. يرجى المحاولة مرة أخرى.",
+
+  "chooseLocation": "ختار لبلاصة",
+
+  "addServiceButton": "زيد خدمة",
+
+  "serviceAddedSuccessfully": "تمت إضافة الخدمة بنجاح",
+
+  "locationServicesDisabled": "خدمات الموقع معطلة. يرجى تمكين خدمات الموقع.",
+
+   "locationPermissionsDenied": "تم رفض أذونات الموقع. لا يمكننا الوصول إلى موقعك.",
+
+   "locationPermissionsPermanentlyDenied": "تم رفض أذونات الموقع بشكل دائم، لا يمكننا طلب الأذونات.",
+
+    "signOut": "تسجيل الخروج",
+
+    "errorGettingLocation": "خطأ في الحصول على الموقع",
+
+    "errorGettingAddress": "خطأ في الحصول على العنوان من الإحداثيات",
+
+    "failedToUploadImage": "فشل تحميل الصورة",
+
+    "serviceAddedSuccessfully": "تمت إضافة الخدمة بنجاح",
+
+    "choosePhoto": "اختر صورة",
+
+    "serviceName": "اسم الخدمة",
+
+    "address": "العنوان",
+
+    "categoryMaid": "خادمة منزلية",
+
+    "categoryCleaner": "عامل نظافة",
+
+    "categoryMechanic": "ميكانيكي",
+
+    "categoryBarber": "حلاق",
+
+    "categoryPlumber": "سباك",
+
+    "categoryElectrician": "كهربائي",
+
+    "categoryCarpenter": "نجار",
+
+    "categoryPainter": "دهان",
+
+    "categoryGardener": "بستاني",
+
+    "categoryChef": "شيف",
+
+    "categoryTutor": "مدرس خصوصي",
+
+    "categoryDriver": "سائق",
+
+    "categoryMore": "المزيد",
+
+    "searchServices": "ابحث عن خدمات",
+
+    "bookService": "حجز خدمة",
+
+    "bookingRequestSentSuccessfully": "تم إرسال طلب الحجز بنجاح!",
+
+    "failedToSendBookingRequest": "فشل في إرسال طلب الحجز. يرجى المحاولة مرة أخرى.",
+
+    "paymentMethod": "طريقة الدفع",
+
+    "cash": "نقداً",
+
+    "onlinePayment": "دفع إلكتروني",
+
+    "emailRequired": "البريد الإلكتروني مطلوب",
+
+    "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح",
+
+    "passwordRequired": "كلمة المرور مطلوبة",
+
+    "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+
+    "nameRequired": "الاسم مطلوب",
+
+    "nameTooShort": "يجب أن يتكون الاسم من حرفين على الأقل",
+
+    "phoneRequired": "رقم الهاتف مطلوب",
+
+    "invalidPhone": "يرجى إدخال رقم هاتف صالح",
+
+    "serviceTitleRequired": "عنوان الخدمة مطلوب",
+
+    "serviceTitleTooShort": "يجب أن يتكون عنوان الخدمة من 3 أحرف على الأقل",
+
+    "serviceDescriptionRequired": "وصف الخدمة مطلوب",
+
+    "serviceDescriptionTooShort": "يجب أن يتكون وصف الخدمة من 10 أحرف على الأقل",
+
+    "priceRequired": "السعر مطلوب",
+
+    "priceMustBePositive": "يجب أن يكون السعر أكبر من صفر",
+
+    "locationRequired": "الموقع مطلوب",
+
+    "dateTimeRequired": "التاريخ والوقت مطلوبان",
+
+    "dateTimeMustBeFuture": "يجب أن يكون التاريخ والوقت في المستقبل",
+
+    "descriptionRequired": "الوصف مطلوب",
+
+    "descriptionTooShort": "يجب أن يتكون الوصف من 10 أحرف على الأقل",
+
+    "pendingRequests": "طلبات قيد الانتظار",
+
+    "activeRequests": "طلبات نشطة",
+
+    "completedRequests": "طلبات مكتملة",
+
+    "finishedRequests": "طلبات منتهية",
+
+    "paymentRequests": "طلبات الدفع",
+
+    "requestRejected": "تم رفض الطلب",
+
+    "paymentConfirmedOrderFinished": "تم تأكيد الدفع وإنهاء الطلب",
+
+    "setPriceForService": "تحديد سعر الخدمة",
+
+    "enterYourPrice": "أدخل السعر الخاص بك",
+
+    "setPrice": "تحديد السعر",
+
+    "invalidPrice": "سعر غير صالح",
+
+    "priceRequested": "تم طلب السعر",
+
+    "completeOrder": "إكمال الطلب",
+
+    "confirmPayment": "تأكيد الدفع",
+
+    "paymentRequestedStatus": "تم طلب الدفع. تم تحديث الحالة إلى طلب الدفع.",
+
+    "showingServicesWithin": "عرض الخدمات ضمن {radius} كم",
+
+    "showingCategoryServicesWithin": "عرض خدمات {category} ضمن {radius} كم",
+
+    "errorFetchingServices": "خطأ في جلب الخدمات: {error}",
+
+    "errorFetchingNearbyServices": "خطأ في جلب الخدمات القريبة: {error}",
+
+    "locationNotAvailableShort": "الموقع غير متاح.",
+
+    "reject": "رفض"
+}

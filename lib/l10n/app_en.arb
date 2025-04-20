@@ -1,0 +1,954 @@
+{
+  "@@locale": "en",
+  "appTitle": "Sahel Alik",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+
+  "name": "Name",
+  "@name": {
+    "description": "Name field label"
+  },
+
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+
+  "loginWithGoogle": "Login with Google",
+  "@loginWithGoogle": {
+    "description": "Login with Google button text"
+  },
+
+  "noAccount": "Don't have an account?",
+  "@noAccount": {
+    "description": "Text for users without an account"
+  },
+
+  "haveAccount": "Already have an account?",
+  "@haveAccount": {
+    "description": "Text for users with an account"
+  },
+
+  "skip": "Skip",
+  "@skip": {
+    "description": "Skip button text"
+  },
+
+  "loginFailed": "Login failed. Please check your credentials.",
+  "@loginFailed": {
+    "description": "Login failed message"
+  },
+
+  "enterEmailPassword": "Please enter email and password.",
+  "@enterEmailPassword": {
+    "description": "Enter email and password message"
+  },
+
+  "googleLoginFailed": "Google login failed. Please try again.",
+  "@googleLoginFailed": {
+    "description": "Google login failed message"
+  },
+
+  "fillAllFields": "Please fill all fields.",
+  "@fillAllFields": {
+    "description": "Fill all fields message"
+  },
+
+  "registrationFailed": "Registration failed. Please try again.",
+  "@registrationFailed": {
+    "description": "Registration failed message"
+  },
+
+  "registrationFailedTryAgain": "Registration failed. Please try again.",
+  "@registrationFailedTryAgain": {
+    "description": "Registration failed message, prompting retry"
+  },
+
+  "fillAllFieldsPlease": "Please fill all fields.",
+  "@fillAllFieldsPlease": {
+    "description": "Prompt to fill all required fields"
+  },
+
+  "areYouProvider": "Are you a service provider?",
+  "@areYouProvider": {
+    "description": "Service provider question"
+  },
+
+  "completeRegistration": "Complete Registration",
+  "@completeRegistration": {
+    "description": "Complete registration title"
+  },
+
+  "services": "Services",
+  "@services": {
+    "description": "Services tab label"
+  },
+
+  "orders": "Orders",
+  "@orders": {
+    "description": "Orders tab label"
+  },
+
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile tab label"
+  },
+
+  "noOrdersFound": "No orders found.",
+  "@noOrdersFound": {
+    "description": "Message when no orders are found"
+  },
+
+  "statusLabel": "Status",
+  "@statusLabel": {
+    "description": "Status label"
+  },
+
+  "confirmPrice": "Confirm Price",
+  "@confirmPrice": {
+    "description": "Confirm price button text"
+  },
+
+  "rejectPrice": "Reject Price",
+  "@rejectPrice": {
+    "description": "Reject price button text"
+  },
+
+  "paymentOptions": "Payment Options",
+  "@paymentOptions": {
+    "description": "Payment options title"
+  },
+
+  "payWithCash": "Pay with Cash",
+  "@payWithCash": {
+    "description": "Pay with cash option"
+  },
+
+  "payOnline": "Pay Online",
+  "@payOnline": {
+    "description": "Pay online option"
+  },
+
+  "rateServiceReceived": "Please rate the service you received:",
+  "@rateServiceReceived": {
+    "description": "Rate service prompt"
+  },
+
+  "errorRequestingPayment": "Error requesting payment: {error}",
+  "@errorRequestingPayment": {
+    "description": "Error message when requesting payment",
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "userNotLoggedIn": "User not logged in.",
+  "@userNotLoggedIn": {
+    "description": "User not logged in message"
+  },
+
+  "userProfileNotFound": "User profile not found.",
+  "@userProfileNotFound": {
+    "description": "User profile not found message"
+  },
+
+  "nameLabel": "Name",
+  "@nameLabel": {
+    "description": "Name label for profile"
+  },
+
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Email label for profile"
+  },
+
+  "phoneLabel": "Phone",
+  "@phoneLabel": {
+    "description": "Phone label for profile"
+  },
+
+  "typeLabel": "Type",
+  "@typeLabel": {
+    "description": "Type label for profile"
+  },
+
+  "balanceLabel": "Balance",
+  "@balanceLabel": {
+    "description": "Balance label for profile"
+  },
+
+  "balanceWithCurrency": "{balance} TND",
+  "@balanceWithCurrency": {
+    "description": "Balance with currency format",
+    "placeholders": {
+      "balance": {
+        "type": "double",
+        "format": "decimalPattern"
+      }
+    }
+  },
+
+  "profileName": "Name",
+  "@profileName": {
+    "description": "Profile name label"
+  },
+
+  "profileEmail": "Email",
+  "@profileEmail": {
+    "description": "Profile email label"
+  },
+
+  "profilePhone": "Phone",
+  "@profilePhone": {
+    "description": "Profile phone label"
+  },
+
+  "profileType": "Type",
+  "@profileType": {
+    "description": "Profile type label"
+  },
+
+  "profileBalance": "Balance",
+  "@profileBalance": {
+    "description": "Profile balance label"
+  },
+
+  "serviceDetailsNotFound": "Service details not found.",
+  "@serviceDetailsNotFound": {
+    "description": "Service details not found message"
+  },
+
+  "errorInitiatingOnlinePayment": "Error initiating online payment: {error}",
+  "@errorInitiatingOnlinePayment": {
+    "description": "Error message when initiating online payment",
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "orderStatusUpdatedCompleted": "Order status updated to completed.",
+  "@orderStatusUpdatedCompleted": {
+    "description": "Order status updated message"
+  },
+
+  "errorUpdatingOrderStatus": "Error updating order status: {error}",
+  "@errorUpdatingOrderStatus": {
+    "description": "Error message when updating order status",
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "orderCompletedAndRated": "Order completed and rated.",
+  "@orderCompletedAndRated": {
+    "description": "Order completed and rated message"
+  },
+
+  "errorCompletingOrderAndRating": "Error completing order and rating: {error}",
+  "@errorCompletingOrderAndRating": {
+    "description": "Error message when completing order and rating",
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "priceConfirmed": "Price Confirmed",
+  "@priceConfirmed": {
+    "description": "Price confirmed message"
+  },
+
+  "priceRejected": "Price Rejected",
+  "@priceRejected": {
+    "description": "Price rejected message"
+  },
+
+  "chatbot": "Chatbot",
+  "@chatbot": {
+    "description": "Chatbot title"
+  },
+
+  "completeRegistrationTitle": "Complete Registration",
+  "@completeRegistrationTitle": {
+    "description": "Complete registration page title"
+  },
+
+  "yourName": "Your Name",
+  "@yourName": {
+    "description": "Your name field label"
+  },
+
+  "doYouHaveService": "Do you have a service?",
+  "@doYouHaveService": {
+    "description": "Question about having a service"
+  },
+
+  "doIHaveAccount": "Do I have an account?",
+  "@doIHaveAccount": {
+    "description": "Question about having an account"
+  },
+
+  "searcherHome": "Searcher Home",
+  "@searcherHome": {
+    "description": "Searcher home title"
+  },
+
+  "providerHome": "Provider Home",
+  "@providerHome": {
+    "description": "Provider home title"
+  },
+
+  "serviceInformation": "Service Information",
+  "@serviceInformation": {
+    "description": "Service information title"
+  },
+
+  "providerDetails": "Provider Details",
+  "@providerDetails": {
+    "description": "Provider details title"
+  },
+
+  "category": "Category",
+  "@category": {
+    "description": "Category label"
+  },
+
+  "description": "Description",
+  "@description": {
+    "description": "Description label"
+  },
+
+  "location": "Location",
+  "@location": {
+    "description": "Location label"
+  },
+
+  "price": "Price (per hour)",
+  "@price": {
+    "description": "Price label"
+  },
+
+  "pricePerHour": "{price} TND/hour",
+  "@pricePerHour": {
+    "description": "Price per hour format",
+    "placeholders": {
+      "price": {
+        "type": "double",
+        "format": "decimalPattern"
+      }
+    }
+  },
+
+  "update": "Update",
+  "@update": {
+    "description": "Update button text"
+  },
+
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+
+  "addService": "Add Service",
+  "@addService": {
+    "description": "Add service button text"
+  },
+
+  "title": "Title",
+  "@title": {
+    "description": "Title label"
+  },
+
+  "selectLocation": "Select Location",
+  "@selectLocation": {
+    "description": "Select location button text"
+  },
+
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading text"
+  },
+
+  "failedToAddService": "Failed to add service. Please try again.",
+  "@failedToAddService": {
+    "description": "Failed to add service message"
+  },
+
+  "chooseLocation": "Choose Location",
+  "@chooseLocation": {
+    "description": "Choose location button text"
+  },
+
+  "addServiceButton": "Add Service",
+  "@addServiceButton": {
+    "description": "Add service button text"
+  },
+
+  "locationServicesDisabled": "Location services are disabled. Please enable location services.",
+  "@locationServicesDisabled": {
+    "description": "Location services disabled message"
+  },
+
+  "locationPermissionsDenied": "Location permissions denied. We cannot access your location.",
+  "@locationPermissionsDenied": {
+    "description": "Location permissions denied message"
+  },
+
+  "locationPermissionsPermanentlyDenied": "Location permissions are permanently denied, we cannot request permissions.",
+  "@locationPermissionsPermanentlyDenied": {
+    "description": "Location permissions permanently denied message"
+  },
+
+  "dateAndTime": "Date and Time",
+  "@dateAndTime": {
+    "description": "Date and time label"
+  },
+
+  "selectDateAndTime": "Select Date and Time",
+  "@selectDateAndTime": {
+    "description": "Select date and time text"
+  },
+
+  "missionDescription": "Mission Description",
+  "@missionDescription": {
+    "description": "Mission description label"
+  },
+
+  "sendRequest": "Send Request",
+  "@sendRequest": {
+    "description": "Send request button text"
+  },
+
+  "paymentSuccessful": "Payment Successful!",
+  "@paymentSuccessful": {
+    "description": "Payment successful message"
+  },
+
+  "rateService": "Please rate the service you received:",
+  "@rateService": {
+    "description": "Rate service message"
+  },
+
+  "submitRating": "Submit Rating and Go Home",
+  "@submitRating": {
+    "description": "Submit rating button text"
+  },
+
+  "pending": "Pending",
+  "@pending": {
+    "description": "Pending status"
+  },
+
+  "priceConfirmation": "Price Confirmation",
+  "@priceConfirmation": {
+    "description": "Price confirmation tab"
+  },
+
+  "active": "Active",
+  "@active": {
+    "description": "Active status"
+  },
+
+  "completed": "Completed",
+  "@completed": {
+    "description": "Completed status"
+  },
+
+  "finished": "Finished",
+  "@finished": {
+    "description": "Finished status"
+  },
+
+  "requestId": "Request ID",
+  "@requestId": {
+    "description": "Request ID label"
+  },
+
+  "serviceId": "Service ID",
+  "@serviceId": {
+    "description": "Service ID label"
+  },
+
+  "status": "Status",
+  "@status": {
+    "description": "Status label"
+  },
+
+  "providerPrice": "Provider Price",
+  "@providerPrice": {
+    "description": "Provider price label"
+  },
+
+  "userRating": "User Rating",
+  "@userRating": {
+    "description": "User rating label"
+  },
+
+  "youRated": "You rated this service {rating} stars",
+  "@youRated": {
+    "description": "You rated message",
+    "placeholders": {
+      "rating": {
+        "type": "String",
+        "example": "4.5"
+      }
+    }
+  },
+
+  "notRatedYet": "Not rated yet",
+  "@notRatedYet": {
+    "description": "Not rated yet message"
+  },
+
+  "confirmPrice": "Confirm Price",
+  "@confirmPrice": {
+    "description": "Confirm price button text"
+  },
+
+  "rejectPrice": "Reject Price",
+  "@rejectPrice": {
+    "description": "Reject price button text"
+  },
+
+  "pay": "Pay",
+  "@pay": {
+    "description": "Pay button text"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button text"
+  },
+
+  "serviceDetails": "Service Details",
+  "@serviceDetails": {
+    "description": "Service details title"
+  },
+
+  "providerInformation": "Provider Information",
+  "@providerInformation": {
+    "description": "Provider information title"
+  },
+
+  "serviceInformationTitle": "Service Information",
+  "@serviceInformationTitle": {
+    "description": "Service information title"
+  },
+
+  "titleLabel": "Title",
+  "@titleLabel": {
+    "description": "Title label for service details"
+  },
+
+  "updateButton": "Update",
+  "@updateButton": {
+    "description": "Update button text"
+  },
+
+  "deleteButton": "Delete",
+  "@deleteButton": {
+    "description": "Delete button text"
+  },
+
+  "locationNotAvailable": "Location not available, showing all services.",
+  "@locationNotAvailable": {
+    "description": "Location not available message"
+  },
+
+  "filterByRadius": "Filter by Radius",
+  "@filterByRadius": {
+    "description": "Filter by radius title"
+  },
+
+  "selectRadius": "Select radius (km):",
+  "@selectRadius": {
+    "description": "Select radius label"
+  },
+
+  "signOut": "Sign Out",
+  "@signOut": {
+    "description": "Sign out button text"
+  },
+
+  "errorGettingLocation": "Error getting location",
+  "@errorGettingLocation": {
+    "description": "Error message when getting location fails"
+  },
+
+  "errorGettingAddress": "Error getting address from coordinates",
+  "@errorGettingAddress": {
+    "description": "Error message when getting address fails"
+  },
+
+  "failedToUploadImage": "Failed to upload image",
+  "@failedToUploadImage": {
+    "description": "Error message when image upload fails"
+  },
+
+  "serviceAddedSuccessfully": "Service added successfully",
+  "@serviceAddedSuccessfully": {
+    "description": "Success message when service is added"
+  },
+
+  "choosePhoto": "Choose Photo",
+  "@choosePhoto": {
+    "description": "Button text to choose a photo"
+  },
+
+  "serviceName": "Service Name",
+  "@serviceName": {
+    "description": "Label for service name input field"
+  },
+
+  "address": "Address",
+  "@address": {
+    "description": "Label for address input field"
+  },
+
+  "categoryMaid": "Maid",
+  "@categoryMaid": {
+    "description": "Maid service category"
+  },
+
+  "categoryCleaner": "Cleaner",
+  "@categoryCleaner": {
+    "description": "Cleaner service category"
+  },
+
+  "categoryMechanic": "Mechanic",
+  "@categoryMechanic": {
+    "description": "Mechanic service category"
+  },
+
+  "categoryBarber": "Barber",
+  "@categoryBarber": {
+    "description": "Barber service category"
+  },
+
+  "categoryPlumber": "Plumber",
+  "@categoryPlumber": {
+    "description": "Plumber service category"
+  },
+
+  "categoryElectrician": "Electrician",
+  "@categoryElectrician": {
+    "description": "Electrician service category"
+  },
+
+  "categoryCarpenter": "Carpenter",
+  "@categoryCarpenter": {
+    "description": "Carpenter service category"
+  },
+
+  "categoryPainter": "Painter",
+  "@categoryPainter": {
+    "description": "Painter service category"
+  },
+
+  "categoryGardener": "Gardener",
+  "@categoryGardener": {
+    "description": "Gardener service category"
+  },
+
+  "categoryChef": "Chef",
+  "@categoryChef": {
+    "description": "Chef service category"
+  },
+
+  "categoryTutor": "Tutor",
+  "@categoryTutor": {
+    "description": "Tutor service category"
+  },
+
+  "categoryDriver": "Driver",
+  "@categoryDriver": {
+    "description": "Driver service category"
+  },
+
+  "categoryMore": "More",
+  "@categoryMore": {
+    "description": "More categories option"
+  },
+
+  "searchServices": "Search services",
+  "@searchServices": {
+    "description": "Search services placeholder"
+  },
+
+  "bookService": "Book Service",
+  "@bookService": {
+    "description": "Book service title"
+  },
+
+  "bookingRequestSentSuccessfully": "Booking request sent successfully!",
+  "@bookingRequestSentSuccessfully": {
+    "description": "Booking request sent successfully message"
+  },
+
+  "failedToSendBookingRequest": "Failed to send booking request. Please try again.",
+  "@failedToSendBookingRequest": {
+    "description": "Failed to send booking request message"
+  },
+
+  "paymentMethod": "Payment Method",
+  "@paymentMethod": {
+    "description": "Payment method label"
+  },
+
+  "cash": "Cash",
+  "@cash": {
+    "description": "Cash payment method"
+  },
+
+  "onlinePayment": "Online Payment",
+  "@onlinePayment": {
+    "description": "Online payment method"
+  },
+
+  "emailRequired": "Email is required",
+  "@emailRequired": {
+    "description": "Email required validation message"
+  },
+
+  "invalidEmail": "Please enter a valid email address",
+  "@invalidEmail": {
+    "description": "Invalid email validation message"
+  },
+
+  "passwordRequired": "Password is required",
+  "@passwordRequired": {
+    "description": "Password required validation message"
+  },
+
+  "passwordTooShort": "Password must be at least 6 characters",
+  "@passwordTooShort": {
+    "description": "Password too short validation message"
+  },
+
+  "nameRequired": "Name is required",
+  "@nameRequired": {
+    "description": "Name required validation message"
+  },
+
+  "nameTooShort": "Name must be at least 2 characters",
+  "@nameTooShort": {
+    "description": "Name too short validation message"
+  },
+
+  "phoneRequired": "Phone number is required",
+  "@phoneRequired": {
+    "description": "Phone required validation message"
+  },
+
+  "invalidPhone": "Please enter a valid phone number",
+  "@invalidPhone": {
+    "description": "Invalid phone validation message"
+  },
+
+  "serviceTitleRequired": "Service title is required",
+  "@serviceTitleRequired": {
+    "description": "Service title required validation message"
+  },
+
+  "serviceTitleTooShort": "Service title must be at least 3 characters",
+  "@serviceTitleTooShort": {
+    "description": "Service title too short validation message"
+  },
+
+  "serviceDescriptionRequired": "Service description is required",
+  "@serviceDescriptionRequired": {
+    "description": "Service description required validation message"
+  },
+
+  "serviceDescriptionTooShort": "Service description must be at least 10 characters",
+  "@serviceDescriptionTooShort": {
+    "description": "Service description too short validation message"
+  },
+
+  "priceRequired": "Price is required",
+  "@priceRequired": {
+    "description": "Price required validation message"
+  },
+
+  "priceMustBePositive": "Price must be greater than zero",
+  "@priceMustBePositive": {
+    "description": "Price must be positive validation message"
+  },
+
+  "locationRequired": "Location is required",
+  "@locationRequired": {
+    "description": "Location required validation message"
+  },
+
+  "dateTimeRequired": "Date and time are required",
+  "@dateTimeRequired": {
+    "description": "Date and time required validation message"
+  },
+
+  "dateTimeMustBeFuture": "Date and time must be in the future",
+  "@dateTimeMustBeFuture": {
+    "description": "Date and time must be in the future validation message"
+  },
+
+  "descriptionRequired": "Description is required",
+  "@descriptionRequired": {
+    "description": "Description required validation message"
+  },
+
+  "descriptionTooShort": "Description must be at least 10 characters",
+  "@descriptionTooShort": {
+    "description": "Description too short validation message"
+  },
+
+  "pendingRequests": "Pending Requests",
+  "@pendingRequests": {
+    "description": "Pending requests tab title"
+  },
+
+  "activeRequests": "Active Requests",
+  "@activeRequests": {
+    "description": "Active requests tab title"
+  },
+
+  "completedRequests": "Completed Requests",
+  "@completedRequests": {
+    "description": "Completed requests tab title"
+  },
+
+  "finishedRequests": "Finished Requests",
+  "@finishedRequests": {
+    "description": "Finished requests tab title"
+  },
+
+  "paymentRequests": "Payment Requests",
+  "@paymentRequests": {
+    "description": "Payment requests tab title"
+  },
+
+  "requestRejected": "Request Rejected",
+  "@requestRejected": {
+    "description": "Request rejected message"
+  },
+
+  "paymentConfirmedOrderFinished": "Payment Confirmed and Order Finished",
+  "@paymentConfirmedOrderFinished": {
+    "description": "Payment confirmed and order finished message"
+  },
+
+  "setPriceForService": "Set Price for Service",
+  "@setPriceForService": {
+    "description": "Set price for service dialog title"
+  },
+
+  "enterYourPrice": "Enter your price",
+  "@enterYourPrice": {
+    "description": "Enter your price hint text"
+  },
+
+  "setPrice": "Set Price",
+  "@setPrice": {
+    "description": "Set price button text"
+  },
+
+  "invalidPrice": "Invalid price",
+  "@invalidPrice": {
+    "description": "Invalid price message"
+  },
+
+  "priceRequested": "Price requested",
+  "@priceRequested": {
+    "description": "Price requested message"
+  },
+
+  "completeOrder": "Complete Order",
+  "@completeOrder": {
+    "description": "Complete order button text"
+  },
+
+  "confirmPayment": "Confirm Payment",
+  "@confirmPayment": {
+    "description": "Confirm payment button text"
+  },
+
+  "paymentRequestedStatus": "Payment requested. Status updated to payment_request.",
+  "@paymentRequestedStatus": {
+    "description": "Payment requested status message"
+  },
+
+  "showingServicesWithin": "Showing services within {radius} km",
+  "@showingServicesWithin": {
+    "description": "Showing services within radius message",
+    "placeholders": {
+      "radius": {
+        "type": "String",
+        "example": "5.0"
+      }
+    }
+  },
+
+  "showingCategoryServicesWithin": "Showing {category} services within {radius} km",
+  "@showingCategoryServicesWithin": {
+    "description": "Showing category services within radius message",
+    "placeholders": {
+      "category": {
+        "type": "String",
+        "example": "Plumber"
+      },
+      "radius": {
+        "type": "String",
+        "example": "5.0"
+      }
+    }
+  },
+
+  "errorFetchingServices": "Error fetching services: {error}",
+  "@errorFetchingServices": {
+    "description": "Error fetching services message",
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "errorFetchingNearbyServices": "Error fetching nearby services: {error}",
+  "@errorFetchingNearbyServices": {
+    "description": "Error fetching nearby services message",
+    "placeholders": {
+      "error": {}
+    }
+  },
+
+  "locationNotAvailableShort": "Location not available.",
+  "@locationNotAvailableShort": {
+    "description": "Short location not available message"
+  },
+
+  "reject": "Reject",
+  "@reject": {
+    "description": "Reject button text"
+  }
+}
