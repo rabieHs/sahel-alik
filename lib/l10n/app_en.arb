@@ -950,5 +950,55 @@
   "reject": "Reject",
   "@reject": {
     "description": "Reject button text"
+  },
+
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+
+  "or": "OR",
+  "@or": {
+    "description": "OR text for dividers"
+  },
+
+  "personalInformation": "Personal Information",
+  "@personalInformation": {
+    "description": "Personal information section title"
+  },
+
+  "accountInformation": "Account Information",
+  "@accountInformation": {
+    "description": "Account information section title"
+  },
+
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings menu item"
+  },
+
+  "helpAndSupport": "Help & Support",
+  "@helpAndSupport": {
+    "description": "Help and support menu item"
+  },
+
+  "accountType": "Account Type",
+  "@accountType": {
+    "description": "Account type label"
+  },
+
+  "settingsComingSoon": "Settings coming soon",
+  "@settingsComingSoon": {
+    "description": "Settings coming soon message"
+  },
+
+  "helpAndSupportComingSoon": "Help & Support coming soon",
+  "@helpAndSupportComingSoon": {
+    "description": "Help and support coming soon message"
+  },
+
+  "viewDetails": "View Details",
+  "@viewDetails": {
+    "description": "View details button text"
   }
 }

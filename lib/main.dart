@@ -1,19 +1,21 @@
-import 'dart:async'; // Import async
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:app_links/app_links.dart'; // Import app_links
-import 'package:flutter/services.dart'; // Import services for PlatformException
+import 'package:app_links/app_links.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sahel_alik/firebase_options.dart';
-import 'package:sahel_alik/models/user.dart'; // Import UserModel
+import 'package:sahel_alik/models/user.dart';
 import 'package:sahel_alik/providers/locale_provider.dart';
 import 'package:sahel_alik/services/auth_service.dart';
+import 'package:sahel_alik/theme/app_theme.dart';
 import 'package:sahel_alik/views/interfaces/login_interface.dart';
 import 'package:sahel_alik/views/interfaces/register_interface.dart';
 import 'package:sahel_alik/views/interfaces/searcher/searcher_home_interface.dart';
-import 'package:sahel_alik/views/interfaces/searcher/payment_success_page.dart'; // Import success page
-import 'package:sahel_alik/views/interfaces/searcher/payment_error_page.dart'; // Import error page
+import 'package:sahel_alik/views/interfaces/searcher/payment_success_page.dart';
+import 'package:sahel_alik/views/interfaces/searcher/payment_error_page.dart';
+import 'package:sahel_alik/views/interfaces/splash_screen.dart';
 
 import 'package:sahel_alik/views/interfaces/searcher/booking_screen.dart'; // Import BookingScreen
 import 'package:sahel_alik/models/service.dart'; // Import ServiceModel
@@ -110,24 +112,12 @@ class _MyAppState extends State<MyApp> {
         Locale('en'), // English
         Locale('ar'), // Arabic
       ],
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-        ),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.tealAccent,
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme(),
+      darkTheme: AppTheme.darkTheme(),
       themeMode: ThemeMode.system, // Use system theme by default
-      home:
-          const AuthWrapper(), // Use AuthWrapper to handle authentication state
+      home: const SplashScreen(), // Start with splash screen
       routes: {
+        '/auth': (context) => const AuthWrapper(), // Route to auth wrapper
         '/providerHome': (context) => const ProviderHomeInterface(),
         '/searcherHome': (context) => const SearcherHomeInterface(),
         '/paymentSuccess': (context) =>

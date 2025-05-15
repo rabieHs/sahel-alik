@@ -350,5 +350,25 @@
 
     "locationNotAvailableShort": "الموقع غير متاح.",
 
-    "reject": "رفض"
+    "reject": "رفض",
+
+    "forgotPassword": "نسيت كلمة المرور؟",
+
+    "or": "أو",
+
+    "personalInformation": "المعلومات الشخصية",
+
+    "accountInformation": "معلومات الحساب",
+
+    "settings": "الإعدادات",
+
+    "helpAndSupport": "المساعدة والدعم",
+
+    "accountType": "نوع الحساب",
+
+    "settingsComingSoon": "الإعدادات قريباً",
+
+    "helpAndSupportComingSoon": "المساعدة والدعم قريباً",
+
+    "viewDetails": "عرض التفاصيل"
 }

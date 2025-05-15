@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../widgets/service_card.dart';
 import '../../../services/service_service.dart';
 import '../../../models/service.dart';
+import '../../../models/user.dart';
 import '../../../utils/location_utils.dart';
 
 class SearcherServicesTab extends StatefulWidget {
@@ -17,9 +18,12 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
   String? _selectedCategory;
   List<ServiceModel> _services = [];
   List<ServiceModel> _filteredServices = [];
+  List<Map<String, dynamic>> _servicesWithProviders = [];
+  List<Map<String, dynamic>> _filteredServicesWithProviders = [];
   bool _isLoading = true;
   double _radius = 5.0; // Default radius
   final TextEditingController _searchController = TextEditingController();
+  bool _useEnhancedSearch = true; // Flag to use enhanced search
 
   List<Map<String, dynamic>> _getLocalizedCategories(BuildContext context) {
     return [
@@ -96,7 +100,11 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
     super.initState();
     // Add a small delay to ensure the widget is fully mounted before fetching
     Future.delayed(Duration.zero, () {
-      _fetchServices();
+      if (_useEnhancedSearch) {
+        _fetchServicesWithProviders();
+      } else {
+        _fetchServices();
+      }
     });
   }
 
@@ -176,19 +184,61 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
   }
 
   void _filterServices(String query) {
+    if (_useEnhancedSearch) {
+      _filterServicesWithProviders(query);
+    } else {
+      _filterBasicServices(query);
+    }
+  }
+
+  void _filterBasicServices(String query) {
     String lowerCaseQuery = query.toLowerCase();
     List<ServiceModel> filteredList = [];
     if (query.isNotEmpty) {
       filteredList = _services
           .where((service) =>
               service.title!.toLowerCase().contains(lowerCaseQuery) ||
-              service.description!.toLowerCase().contains(lowerCaseQuery))
+              service.description!.toLowerCase().contains(lowerCaseQuery) ||
+              (service.category?.toLowerCase().contains(lowerCaseQuery) ??
+                  false))
           .toList();
     } else {
       filteredList = List.from(_services);
     }
     setState(() {
       _filteredServices = filteredList;
+    });
+  }
+
+  void _filterServicesWithProviders(String query) {
+    String lowerCaseQuery = query.toLowerCase();
+    List<Map<String, dynamic>> filteredList = [];
+
+    if (query.isNotEmpty) {
+      filteredList = _servicesWithProviders.where((item) {
+        ServiceModel service = item['service'];
+        UserModel? provider = item['provider'];
+
+        // Search in service title, description, and category
+        bool matchesService =
+            (service.title?.toLowerCase().contains(lowerCaseQuery) ?? false) ||
+                (service.description?.toLowerCase().contains(lowerCaseQuery) ??
+                    false) ||
+                (service.category?.toLowerCase().contains(lowerCaseQuery) ??
+                    false);
+
+        // Search in provider name if available
+        bool matchesProvider = provider != null &&
+            (provider.name?.toLowerCase().contains(lowerCaseQuery) ?? false);
+
+        return matchesService || matchesProvider;
+      }).toList();
+    } else {
+      filteredList = List.from(_servicesWithProviders);
+    }
+
+    setState(() {
+      _filteredServicesWithProviders = filteredList;
     });
   }
 
@@ -252,7 +302,33 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
     );
   }
 
-  // Removed duplicate initState
+  // Fetch services with provider details for enhanced search
+  Future<void> _fetchServicesWithProviders() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final serviceService = ServiceService();
+      final servicesWithProviders =
+          await serviceService.getServicesWithProviderDetails();
+
+      if (mounted) {
+        setState(() {
+          _servicesWithProviders = servicesWithProviders;
+          _filteredServicesWithProviders = servicesWithProviders;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        _showSnackBar('Error fetching services: $e');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +356,13 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
                   // Refresh button
                   IconButton(
                     icon: const Icon(Icons.refresh),
-                    onPressed: () => _fetchServices(radius: _radius),
+                    onPressed: () {
+                      if (_useEnhancedSearch) {
+                        _fetchServicesWithProviders();
+                      } else {
+                        _fetchServices(radius: _radius);
+                      }
+                    },
                     tooltip: 'Refresh services',
                   ),
                 ],
@@ -375,13 +457,26 @@ class _SearcherServicesTabState extends State<SearcherServicesTab> {
               child: _isLoading
                   ? const Center(
                       child: CircularProgressIndicator()) // Loading indicator
-                  : ListView.builder(
-                      itemCount: _filteredServices.length,
-                      itemBuilder: (context, index) {
-                        final service = _filteredServices[index];
-                        return ServiceCard(service: service);
-                      },
-                    ),
+                  : _useEnhancedSearch
+                      ? ListView.builder(
+                          itemCount: _filteredServicesWithProviders.length,
+                          itemBuilder: (context, index) {
+                            final item = _filteredServicesWithProviders[index];
+                            final service = item['service'] as ServiceModel;
+                            final provider = item['provider'] as UserModel?;
+                            return ServiceCard(
+                              service: service,
+                              providerName: provider?.name,
+                            );
+                          },
+                        )
+                      : ListView.builder(
+                          itemCount: _filteredServices.length,
+                          itemBuilder: (context, index) {
+                            final service = _filteredServices[index];
+                            return ServiceCard(service: service);
+                          },
+                        ),
             ),
           ],
         ),

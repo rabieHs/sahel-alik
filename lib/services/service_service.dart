@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sahel_alik/models/service.dart';
+import 'package:sahel_alik/models/user.dart';
 import 'package:geoflutterfire3/geoflutterfire3.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 
@@ -193,6 +194,58 @@ class ServiceService {
         return ServiceModel.fromJson(data);
       }).toList();
     });
+  }
+
+  // Get services with provider details for enhanced search
+  Future<List<Map<String, dynamic>>> getServicesWithProviderDetails() async {
+    try {
+      // Get all services
+      QuerySnapshot serviceSnapshot = await _serviceCollection.get();
+      List<Map<String, dynamic>> servicesWithProviders = [];
+
+      // For each service, fetch the provider details
+      for (var doc in serviceSnapshot.docs) {
+        Map<String, dynamic> serviceData = doc.data() as Map<String, dynamic>;
+        serviceData['id'] = doc.id;
+
+        // Get provider details if userId exists
+        String? userId = serviceData['userId'];
+        if (userId != null) {
+          DocumentSnapshot userDoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .get();
+
+          if (userDoc.exists) {
+            Map<String, dynamic> userData =
+                userDoc.data() as Map<String, dynamic>;
+
+            // Create a combined object with service and provider details
+            servicesWithProviders.add({
+              'service': ServiceModel.fromJson(serviceData),
+              'provider': UserModel.fromJson(userData),
+            });
+          } else {
+            // If provider not found, still include the service
+            servicesWithProviders.add({
+              'service': ServiceModel.fromJson(serviceData),
+              'provider': null,
+            });
+          }
+        } else {
+          // If no userId, still include the service
+          servicesWithProviders.add({
+            'service': ServiceModel.fromJson(serviceData),
+            'provider': null,
+          });
+        }
+      }
+
+      return servicesWithProviders;
+    } catch (e) {
+      print('Error fetching services with provider details: $e');
+      return [];
+    }
   }
 
   // Get services by user ID

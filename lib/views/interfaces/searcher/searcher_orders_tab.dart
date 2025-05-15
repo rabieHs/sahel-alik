@@ -43,6 +43,10 @@ class _SearcherOrdersTabState extends State<SearcherOrdersTab>
       appBar: TabBar(
         controller: _tabController,
         isScrollable: true, // Added isScrollable
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.white70,
+        indicatorColor: Colors.white,
+        indicatorWeight: 3,
         tabs: [
           Tab(text: AppLocalizations.of(context)!.pending),
           Tab(text: AppLocalizations.of(context)!.priceConfirmation),

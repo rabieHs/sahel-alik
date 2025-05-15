@@ -229,56 +229,88 @@ class _SearcherHomeInterfaceState extends State<SearcherHomeInterface> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.searcherHome),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.handshake_outlined, size: 24),
+            SizedBox(width: 8),
+            Text(
+              'Sahel Alik',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: true,
+        elevation: 0,
         actions: [
-          const LanguageSwitcher(),
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
               _showFilterDialog(context);
             },
+            tooltip: AppLocalizations.of(context)!.filterByRadius,
           ),
+          const LanguageSwitcher(),
         ],
       ),
       body: _widgetOptions[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.miscellaneous_services),
-            label: AppLocalizations.of(context)!.services,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.shopping_cart),
-            label: AppLocalizations.of(context)!.orders,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person),
-            label: AppLocalizations.of(context)!.profile,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(context).brightness == Brightness.dark
-            ? Colors.white70
-            : Colors.grey[700],
-        onTap: _onItemTapped,
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? Theme.of(context).colorScheme.surface
-            : Colors.white,
-        elevation: 4,
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        showUnselectedLabels: true,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: AppLocalizations.of(context)!.services,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.receipt_long_outlined),
+              activeIcon: Icon(Icons.receipt_long),
+              label: AppLocalizations.of(context)!.orders,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: AppLocalizations.of(context)!.profile,
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Colors.grey[600],
+          onTap: _onItemTapped,
+          backgroundColor: Theme.of(context).brightness == Brightness.dark
+              ? Theme.of(context).colorScheme.surface
+              : Colors.white,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          selectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+          unselectedLabelStyle: const TextStyle(fontSize: 12),
+          showUnselectedLabels: true,
+        ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => const ChatbotScreen()),
-      //     );
-      //   },
-      //   child: const Icon(Icons.chat),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+          );
+        },
+        child: const Icon(Icons.chat),
+        tooltip: 'Chat Assistant',
+        elevation: 4,
+      ),
     );
   }
 }
